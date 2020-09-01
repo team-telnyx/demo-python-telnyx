@@ -46,7 +46,7 @@ The following environmental variables need to be set
 
 ### .env file
 
-This app uses the excellent [dotenv](https://github.com/bkeepers/dotenv) package to manage environment variables.
+This app uses the excellent [python-dotenv](https://github.com/theskumar/python-dotenv) package to manage environment variables.
 
 Make a copy of [`.env.sample`](./.env.sample) and save as `.env` and update the variables to match your creds.
 
