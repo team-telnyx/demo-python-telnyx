@@ -45,8 +45,33 @@ def media_downloader_uploader(url):
     return file_url
 
 
+def validate_webhook(req):
+    body = req.data.decode("utf-8")
+    signature = req.headers.get("Telnyx-Signature-ed25519", None)
+    timestamp = req.headers.get("Telnyx-Timestamp", None)
+
+    try:
+        event = telnyx.Webhook.construct_event(body, signature, timestamp, 100000000)
+    except ValueError:
+        print("Error while decoding event!")
+        return False
+    except telnyx.error.SignatureVerificationError:
+        print("Invalid signature!")
+        return False
+    except Exception as e:
+        print("Unknown Error")
+        print(e)
+        return False
+
+    print("Received event: id={id}, type={type}".format(id=event.data.id, type=event.data.payload.type))
+    return True
+
+
 @app.route("/messaging/inbound", methods=["POST"])
 def inbound_message():
+    valid_webhook = validate_webhook(request)
+    if not valid_webhook:
+        return "Webhook not verified", 400
     body = json.loads(request.data)
     message_id = body["data"]["payload"]["id"]
     print(f"Received inbound message with ID: {message_id}")
@@ -87,5 +112,6 @@ if __name__ == "__main__":
     load_dotenv()
     TELNYX_MMS_S3_BUCKET = os.getenv("TELNYX_MMS_S3_BUCKET")
     telnyx.api_key = os.getenv("TELNYX_API_KEY")
+    telnyx.public_key = os.getenv("TELNYX_PUBLIC_KEY")
     TELNYX_APP_PORT = os.getenv("TELNYX_APP_PORT")
     app.run(port=TELNYX_APP_PORT)
