@@ -70,7 +70,15 @@ Open this .env file and fill in the required variables.
 
 *NGROK_URL:* For the project you will ned ngrok installed and running. Grad the url you got from step 2 and place here.
 
+
 Save this file. If these are correct, you should now have everthing you need to run the app.
+
+#### 8. Configure your Answer XML file.
+
+On the condition that the agent hangs up, how do you want this to be handled?
+
+You can specify this in your answer.xml file. A dial is there as a placeholder. If you want nothing to be done. Send an empty XML file.
+
 
 ## Running The Application
 

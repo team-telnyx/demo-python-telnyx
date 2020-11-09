@@ -2,5 +2,4 @@
 <!-- This third script plays voicemail instructions and records a voicemail -->
 <Response>
 <!-- The play verb plays a greeting from an MP3 file when the call is answered -->
-
 </Response>
