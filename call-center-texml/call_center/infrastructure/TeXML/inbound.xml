@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This first script answers the call, plays a greeting and attempts to connect the call to an available agent -->
+<Response>
+<!-- The play verb plays a greeting from an MP3 file when the call is answered -->
+    <!-- Use this for audio files <Play>http://26941fae77f0.ngrok.io/TeXML/support_greeting</Play> -->
+    <Say voice="alice">Hello, you have reached the call center. Please hold while you are connected to the next available agent.</Say>
+    <!-- The dial verb dials simultaneous calls to the numbers listed below and proceeds to the next script denoted in action if the call is not answered  -->
+    <Dial record="record-from-answer-dual">
+        <Sip statusCallback='http://26941fae77f0.ngrok.io/TeXML/events' statusCallbackEvent='initiated answered completed'>sip:sian@sip.telnyx.com</Sip>
+        <Sip statusCallback='http://26941fae77f0.ngrok.io/TeXML/events' statusCallbackEvent='initiated answered completed'>sip:sian85784@sip.telnyx.com</Sip>
+        <Sip statusCallback='http://26941fae77f0.ngrok.io/TeXML/events' statusCallbackEvent='initiated answered completed'>sip:sian50974@sip.telnyx.com</Sip>
+        <Sip statusCallback='http://26941fae77f0.ngrok.io/TeXML/events' statusCallbackEvent='initiated answered completed'>sip:sian68881@sip.telnyx.com</Sip>
+        <Sip statusCallback='http://26941fae77f0.ngrok.io/TeXML/events' statusCallbackEvent='initiated answered completed'>sip:sian66840@sip.telnyx.com</Sip>
+        <Sip statusCallback='http://26941fae77f0.ngrok.io/TeXML/events' statusCallbackEvent='initiated answered completed'>sip:sian82242@sip.telnyx.com</Sip>
+        <Sip statusCallback='http://26941fae77f0.ngrok.io/TeXML/events' statusCallbackEvent='initiated answered completed'>sip:sian34587@sip.telnyx.com</Sip>
+        <Sip statusCallback='http://26941fae77f0.ngrok.io/TeXML/events' statusCallbackEvent='initiated answered completed'>sip:sian56498@sip.telnyx.com</Sip>
+        <Sip statusCallback='http://26941fae77f0.ngrok.io/TeXML/events' statusCallbackEvent='initiated answered completed'>sip:Defaultc0bag@sip.telnyx.com</Sip>
+        <Sip statusCallback='http://26941fae77f0.ngrok.io/TeXML/events' statusCallbackEvent='initiated answered completed'>sip:lgqzmhqfqanq@sip.telnyx.com</Sip>
+    </Dial>
+    <Pause length="1"/>
+    <Redirect method="POST">http://26941fae77f0.ngrok.io/TeXML/completed</Redirect>
+</Response>

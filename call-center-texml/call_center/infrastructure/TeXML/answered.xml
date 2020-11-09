@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+	<Dial audioUrl="http://call-center.query.consul:8080/TeXML/ringback">
+		<Number>+18889809750</Number>
+	</Dial>
+</Response>
