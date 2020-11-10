@@ -53,7 +53,26 @@ Lastly, add the outbound event url ngrok_forwarding_ul + /outbound/event
 
 This form can be found under basic -> Events -> Webhook url.
 
-#### 7. Run Setup and configure variables.
+
+#### 7. Set up virtual env.
+
+For pipenv:
+
+Install with command:
+
+`pip install pipenv`
+
+In call-center-texml directory run:
+
+`pipenv shell`
+
+& then
+
+`pipenv update`
+
+This will create the enviroment and install the requirements in the pipfile.
+
+#### 8. Run Setup and configure variables.
 
 In the call-center-texml directory, run the following command: 
 
@@ -73,7 +92,7 @@ Open this .env file and fill in the required variables.
 
 Save this file. If these are correct, you should now have everthing you need to run the app.
 
-#### 8. Configure your Answer XML file.
+#### 9. Configure your Answer XML file.
 
 On the condition that the agent hangs up, how do you want this to be handled?
 
@@ -89,7 +108,7 @@ Use the following command to execute the application:
 You will now see it running on localhost port 8080.
 
 
-## Setting up Audio files
+## Optional: Setting up Audio files
 
 Curretly, the XML files are configured to serve a 'say' to tell the dialer what is happening. 
 

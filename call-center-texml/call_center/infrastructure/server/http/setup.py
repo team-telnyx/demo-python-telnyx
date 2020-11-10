@@ -35,8 +35,6 @@ def _setup_routes(app):
     app.router.add_get("/TeXML/support_greeting", audio.hello_handler)
     app.router.add_get("/TeXML/support_busy", audio.busy_handler)
     app.router.add_get("/TeXML/support_voicemail", audio.voicemail_handler)
-    app.router.add_get("/TeXML/music", audio.music_handler)
-    app.router.add_get("/TeXML/ringback", audio.rinback_handler)
 
 
 def configure_app(app):
