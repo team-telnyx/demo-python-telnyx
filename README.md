@@ -28,6 +28,7 @@ You will need to set up:
 | Example                            | Description                                                                                                         |
 |:-----------------------------------|:--------------------------------------------------------------------------------------------------------------------|
 | [Flask Messaging](flask-messaging) | Example working with inbound MMS & SMS messages, downloading media from inbound MMS, and uploading media to AWS S3. |
+| [TeXML Call Center](call-center-texml) | Call center solution using aiohttp, asyncio and Telnyx TeXML. |
 
 ### Install
 
