@@ -39,7 +39,7 @@ def menu_section(direction):
 def incoming_call(from_num) -> str:
     blocks = [
         header_section("Incoming Call Ringing"),
-        body_section("@here " + str(from_num) + " is calling. Let's jump on that!"),
+        body_section(str(from_num) + " is calling. Let's jump on that!"),
     ]
 
     return str(
@@ -73,7 +73,7 @@ def inbound_answered_call(to_uri, from_num) -> str:
         header_section("Incoming Call Answered"),
         body_section(
             str(
-                to_uri[4:-15]
+                to_uri.split("@")[0][4:]
                 + " answered the call from "
                 + str(from_num)
             )
@@ -143,12 +143,12 @@ def outbound_finished_call(agent: str, number: str, duration: str, session: str)
     )
 
 
-def inbound_finished_call(to: str, from_number: str, duration: str, sid: str) -> str:
+def inbound_finished_call(to_uri: str, from_number: str, duration: str, sid: str) -> str:
     # Add tags interactive menu
     blocks = [
         header_section("Incoming Call Ended"),
         body_section(
-           to + " finished call with " + from_number
+           to_uri.split("@")[0][4:] + " finished call with " + from_number
         ),
         {"type": "divider"},
         body_section("Call Duration: " + str(duration) + " seconds."),

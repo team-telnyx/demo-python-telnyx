@@ -53,8 +53,15 @@ Lastly, add the outbound event url ngrok_forwarding_ul + /outbound/event
 
 This form can be found under basic -> Events -> Webhook url.
 
+#### 7. Set up an outbound profile and assign all the sip connections.
 
-#### 7. Set up virtual env.
+Setting up an outbound profile is pretty simple. Guide to that [here](https://support.telnyx.com/en/articles/4320411-outbound-voice-profiles). 
+Please take note of the profile ID.
+
+Assign all your call center agent sip connections to this outbound profile.
+
+
+#### 8. Set up virtual env.
 
 For pipenv:
 
@@ -70,9 +77,9 @@ In call-center-texml directory run:
 
 `pipenv update`
 
-This will create the enviroment and install the requirements in the pipfile.
+This will create the environment and install the requirements in the pipfile.
 
-#### 8. Run Setup and configure variables.
+#### 9. Run Setup and configure variables.
 
 In the call-center-texml directory, run the following command: 
 
@@ -83,16 +90,17 @@ Open this .env file and fill in the required variables.
 
 *API_KEY:* This is your Telnyx API Key available [here](https://portal.telnyx.com/#/app/api-keys). 
 
-*PROD:* Defaults to True. You can set this to either True or False. If set to True, the scheduled jobs for updating connections and sending balance notifications will run.  
+*PROD:* Defaults to True. You can set this to either True or False. If set to True, the scheduled jobs for updating connections and sending balance notifications will run in intervals.  
 
 *SLACK_URL:* The slack url will be found on the slack app for incoming webhooks. More on this can be found [here](https://api.slack.com/messaging/webhooks). 
 
 *NGROK_URL:* For the project you will ned ngrok installed and running. Grad the url you got from step 2 and place here.
 
+*OUTBOUND_PROFILE_ID:* This is the ID of the outbound profile assigned to your connections. Used to know what connections to grab from your account.
 
 Save this file. If these are correct, you should now have everthing you need to run the app.
 
-#### 9. Configure your Answer XML file.
+#### 10. Configure your Answer XML file.
 
 On the condition that the agent hangs up, how do you want this to be handled?
 

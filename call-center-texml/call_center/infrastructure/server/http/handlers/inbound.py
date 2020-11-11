@@ -1,5 +1,4 @@
 from aiohttp import web
-from datetime import datetime as dt
 from call_center.infrastructure.server.http.slack_messages.slack_messages import (
     incoming_call,
     inbound_answered_call,
@@ -10,11 +9,6 @@ from call_center.infrastructure.server.http.slack_messages.slack_messages import
 
 class IncomingCall:
     def __init__(self):
-        self.inbound_cached_data = {
-            "inbound_ongoing_calls": 0,
-            "inbound_calls": [],
-            "missed_calls": [],
-        }
         self.calls = {}
 
     async def statuscallback_handler(self, request) -> web.json_response:
@@ -39,8 +33,7 @@ class IncomingCall:
                 except KeyError:
                     self.calls[sid] = (False, 0)
                     body = incoming_call(data["From"])
-                    self.inbound_cached_data["inbound_ongoing_calls"] += 1
-                    # await request.config_dict["slack_client"].slack_post(body)
+                    await request.config_dict["slack_client"].slack_post(body)
 
             elif data["CallStatus"] == "in-progress":
                 # Set the call to answered
@@ -49,7 +42,7 @@ class IncomingCall:
                 from_num = data["From"]
                 body = inbound_answered_call(to, from_num)
                 # Call in progress slack event
-                # await request.config_dict["slack_client"].slack_post(body)
+                await request.config_dict["slack_client"].slack_post(body)
 
             elif data["CallStatus"] == "completed":
                 # Call Complete slack event
@@ -58,20 +51,8 @@ class IncomingCall:
                     body = inbound_finished_call(
                         data["To"], data["From"], duration, sid
                     )
-                    time_struct = dt.utcnow()
-                    self.inbound_cached_data["inbound_calls"].append(
-                        {
-                            "from": data["From"],
-                            "to": data["To"],
-                            "duration": duration,
-                            "call_id": sid,
-                            "completed_time": time_struct.strftime(
-                                "%y-%m-%d%H:%M:%S)"
-                            ),
-                        }
-                    )
-                    self.inbound_cached_data["inbound_ongoing_calls"] -= 1
-                    # await request.config_dict["slack_client"].slack_post(body)
+
+                    await request.config_dict["slack_client"].slack_post(body)
 
         except KeyError:
             pass
@@ -104,7 +85,6 @@ class IncomingCall:
         req = await request.post()
         sid = req["CallSid"]
         call = self.calls[sid]
-        print(call)
 
         if not call[0]:
             if call[1] == 0:
@@ -115,35 +95,10 @@ class IncomingCall:
 
                 # Missed call slack event (Need to add voicemail url)
                 body = inbound_missed_call(req["From"])
-                time_struct = dt.utcnow()
-                # Might need to move this to status hook to add voicemail url -> maybe not
-                self.inbound_cached_data["missed_calls"].append(
-                    {
-                        "from": req["From"],
-                        "time": time_struct.strftime("%d-%b-%Y (%H:%M:%S)"),
-                    }
-                )
-                # await request.config_dict["slack_client"].slack_post(body)
+                await request.config_dict["slack_client"].slack_post(body)
                 return web.FileResponse(
                     "call_center/infrastructure/TeXML/voicemail.xml"
                 )
         else:
             self.calls.pop(sid)
-            print("In")
             return web.FileResponse("call_center/infrastructure/TeXML/answered.xml")
-
-    async def release_cache(self):
-        """
-        Return the cached data to live endpoint
-        """
-        return self.inbound_cached_data
-
-    async def delete_inbound_data(self,):
-        """
-        Remove cached for day and reset
-        """
-        self.inbound_cached_data = {
-            "inbound_ongoing_calls": 0,
-            "inbound_calls": [],
-            "missed_calls": [],
-        }

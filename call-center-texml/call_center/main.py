@@ -36,6 +36,8 @@ async def startup_handler(app):
 
     app["ngrok_url"] = os.getenv("NGROK_URL")
 
+    app["outbound_id"] = os.getenv("OUTBOUND_PROFILE_ID")
+
     # Call on connection data on startup
     await get_connections(app)
     await balance_check(app)

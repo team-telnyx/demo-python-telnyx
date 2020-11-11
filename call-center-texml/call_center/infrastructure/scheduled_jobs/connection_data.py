@@ -50,14 +50,20 @@ async def get_connections(app: web.Application) -> None:
 
     connection_data = await app["telnyx_client"].get_connections()
     connection_data = connection_data["data"]
-    connection_data = add_domains(connection_data)
+    connections = []
+    # Go through SIP connections and grab relevant ones.
+    for connection in connection_data:
+        if connection["outbound"]["outbound_voice_profile_id"] == app["outbound_id"]:
+            connections.append(connection)
+
+    connections = add_domains(connections)
 
     try:
-        cached_data = app["connection_data"]
-        if connection_data != cached_data:
-            change_files(connection_data, app["ngrok_url"])
-            app["connection_data"] = connection_data
+        cached_data = app["connections"]
+        if connections != cached_data:
+            change_files(connections, app["ngrok_url"])
+            app["connections"] = connections
 
     except KeyError:
-        app["connection_data"] = connection_data
-        change_files(connection_data, app["ngrok_url"])
+        app["connections"] = connections
+        change_files(connections, app["ngrok_url"])
