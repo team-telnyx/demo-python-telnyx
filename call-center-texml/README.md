@@ -26,13 +26,17 @@ Run:
  
  Take note of the forwarding http url.
 
-#### 3. Setup a Telnyx TeXML connection.
+#### 3. Setup a Telnyx TeXML App.
 
 Setup a TeXML connection [here](https://portal.telnyx.com/#/app/call-control/texml). 
 
 Set the 'Voice Method' to GET and put the url: ngrok_forwarding_url + /TeXML/inbound. Eg. http://b06b087392cd.ngrok.io/TeXML/inbound
 
 Set the Status Callback Method to 'POST'.
+
+**E.g**
+
+![TeXML APP](imgs/texml_app.png)
 
 #### 4. Obtain a Telnyx Number. Assign to the TeXML connection.
 
@@ -45,13 +49,23 @@ Your Telnyx API Key can be created on this [page](https://portal.telnyx.com/#/ap
 
 #### 6. Setup Telnyx credential sip connections, one for each potential agent.
 
-Setup your connections. Set the username to be something unique and representative o the agent you will assign the connection to. 
+Setup your connections. Set the username to be something unique and representative of the agent you will assign the connection to. 
 
 In the inbound section, enable 'Recieve SIP URI Calls' to 'From anyone'. 
 
-Lastly, add the outbound event url ngrok_forwarding_ul + /outbound/event 
+![SIP connection uri](imgs/enable_sip_uri.png)
+
+Next, add the outbound event url ngrok_forwarding_ul + /outbound/event 
 
 This form can be found under basic -> Events -> Webhook url.
+
+![Outbound event url](imgs/outbound_events.png)
+
+
+Lastly, you may want to enable a caller ID override on your sip connection if you are not passing a cli when making outbound calls.
+You can do this on the connections outbound settings.
+
+![Caller ID](imgs/caller_id.png)
 
 #### 7. Set up an outbound profile and assign all the sip connections.
 
@@ -118,7 +132,7 @@ You will now see it running on localhost port 8080.
 
 ## Optional: Setting up Audio files
 
-Curretly, the XML files are configured to serve a 'say' to tell the dialer what is happening. 
+Currently, the XML files are configured to serve a 'say' to tell the dialer what is happening. 
 
 However, the server is set up for delivering audio files for things like: initial greeting, 'please stay on hold' and a 'please leave a voicemail' message.
 

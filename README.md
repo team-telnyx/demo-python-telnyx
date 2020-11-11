@@ -4,8 +4,6 @@
 
 ![Telnyx](logo-dark.png)
 
-Sample application demonstrating Node SDK Basics
-
 </div>
 
 ## Documentation & Tutorial
