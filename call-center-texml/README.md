@@ -2,33 +2,63 @@
 
 ## Introduction
 
-This project is an Aiohttp Python server that can be used as a call center solution that leverages Telnyx's TeXML feature.
+This is an example of a call center application built using an Aiohttp Python based server, which leverages [Telnyx's TeXML Translator](https://telnyx.com/texml-translator) product. 
 
-The application will accept calls to a Telnyx number and forward them on to all credential SIP connections on a Telnyx account using TeXML and sip URI dialing.
+The application will accept calls to a Telnyx number and then forward the call to all the credential SIP Connection associated with your outbound voice profile that you create. It does this through SIP URI calling, where the agents are required to register to our [SIP Proxies](https://sip.telnyx.com/) in order to receive the calls.
 
-Two attempts will be made to dial the sip connections. If both attempts fail to be answered by the sip connections, a voicemail prompt will be given.
+Two attempts will be made to dial the agents credential SIP Connections. If both attempts fail to be answered by the agents, a voicemail prompt will trigger should the caller wish to leave a voicemail.
 
 ## How to get started
 
-There are a few configurations needed to run the application.
+You will be required to configure your Telnyx Mission Control Portal account first, then setup and run the call center application in your preferred environment. 
 
-#### 1. Setup Telnyx account.
+## Quick start
 
-Sign up [here](https://telnyx.com/sign-up).
+In this guide, you’ll learn how to get started with the Call Center App by using Telnyx SDKs and the Telnyx Portal. Just follow these steps:
 
-####2. Install ngrok..
+1. Sign Up for a Telnyx Mission Control Portal Account
+2. Create a Telnyx API Key
+3. Install Ngrok
+4. Buy a phone number
+5. Create a Telnyx TeXML Application
+6. Create your agents credential based SIP Connections
+7. Create an outbound voice profile and associate all the SIP Connections
+8. Set up virtual your virtual environment
+9. Run Setup and configure variables
+10. Configure your Answer XML file
 
-Install ngrok by following this [guide](https://ngrok.com/download). 
+---
 
-Run: 
- 
- ``ngrok http 8080`` 
- 
- Take note of the forwarding http url.
+#### Step 1: Sign Up for a Telnyx Mission Control Portal Account
 
-#### 3. Setup a Telnyx TeXML App.
+Navigate to our sign up page [telnyx.com/sign-up](https://telnyx.com/sign-up) to create your free Telnyx account.
 
-Setup a TeXML connection [here](https://portal.telnyx.com/#/app/call-control/texml). 
+Once logged in, you will have access to your Mission Control Portal where you can buy phone numbers, set up and manage your TeXML application, and more.
+
+#### Step 2: Create a Telnyx API Key
+
+Your Telnyx API Key can be created on the API Keys [page](https://portal.telnyx.com/#/app/api-keys) of your Mission Control Portal account. This key will allow this application permission to make the necessary requests to our API endpoints. 
+
+#### Step 3: Install Ngrok
+
+Download and install [ngrok](https://ngrok.com/).
+
+Start up ngrok with `ngrok http 8000` and make note of the https `Forwarding` URL.
+
+You will need it to be able to receive websocket requests from the TeXML application.
+
+#### Step 4: Buy a phone number
+
+Access the Telnyx Mission Control Portal and [buy a phone number](https://portal.telnyx.com/#/app/numbers/search-numbers).
+
+This is your TeXML Call Center phone number that end users will call to reach your application.
+
+#### ![buy a phone number](screenshots/buy_phone_number.png)
+
+
+#### Step 5: Create a Telnyx TeXML Application
+
+Setup and configure your [TeXML application](https://portal.telnyx.com/#/app/call-control/texml) 
 
 Set the 'Voice Method' to GET and put the url: ngrok_forwarding_url + /TeXML/inbound. Eg. http://b06b087392cd.ngrok.io/TeXML/inbound
 
@@ -36,48 +66,46 @@ Set the Status Callback Method to 'POST'.
 
 **E.g**
 
-![TeXML APP](imgs/texml_app.png)
+#### ![TeXML APP](imgs/texml_app.png)
 
-#### 4. Obtain a Telnyx Number. Assign to the TeXML connection.
 
-Any number will do! Purchase numbers [here](https://portal.telnyx.com/#/app/numbers/buy-numbers).
-And assign to your recently created TeXML connection.
+#### Step 6. Create your agents credential based SIP Connections
 
-#### 5. Create an Telnyx API Key.
-
-Your Telnyx API Key can be created on this [page](https://portal.telnyx.com/#/app/api-keys)
-
-#### 6. Setup Telnyx credential sip connections, one for each potential agent.
-
-Setup your connections. Set the username to be something unique and representative of the agent you will assign the connection to. 
+Setup your SIP connections. Set the username to be something unique and representative of the agent you will assign the connection to. 
 
 In the inbound section, enable 'Recieve SIP URI Calls' to 'From anyone'. 
 
 ![SIP connection uri](imgs/enable_sip_uri.png)
 
-Next, add the outbound event url ngrok_forwarding_ul + /outbound/event 
+Next, you will need to add the ngrok forwarding url you got from Step 3.  
+
+**E.g**
+
+ngrok_forwarding_url + /outbound/event 
 
 This form can be found under basic -> Events -> Webhook url.
 
 ![Outbound event url](imgs/outbound_events.png)
 
+Lastly, for when your agents make outbound calls, you may want to enable a caller ID override which enables Telnyx to send out a specific caller ID for each agent.
 
-Lastly, you may want to enable a caller ID override on your sip connection if you are not passing a cli when making outbound calls.
 You can do this on the connections outbound settings.
 
 ![Caller ID](imgs/caller_id.png)
 
-#### 7. Set up an outbound profile and assign all the sip connections.
+#### Step 7. Create an outbound voice profile and associate all the SIP Connections
 
-Setting up an outbound profile is pretty simple. Guide to that [here](https://support.telnyx.com/en/articles/4320411-outbound-voice-profiles). 
-Please take note of the profile ID.
+Setting up an outbound profile is pretty simple and allows all the SIP Connections associated to it to be able to make outbound calls through our network. 
 
-Assign all your call center agent sip connections to this outbound profile.
+Guide on setting up an outbound voice profile can be found [here](https://support.telnyx.com/en/articles/4320411-outbound-voice-profiles). 
 
+Please take note of the profile ID as you will need this for your environment file.
 
-#### 8. Set up virtual env.
+---
 
-For pipenv:
+#### Step 8. Set up virtual your virtual environment
+
+You may choose your preferred virtual environment. In our setup, we will be using [pipenv](https://pypi.org/project/pipenv/)
 
 Install with command:
 
@@ -87,13 +115,13 @@ In call-center-texml directory run:
 
 `pipenv shell`
 
-& then
+and then
 
 `pipenv update`
 
-This will create the environment and install the requirements in the pipfile.
+This will create the environment and install the application requirements in the pipfile.
 
-#### 9. Run Setup and configure variables.
+#### Step 9. Run Setup and configure variables
 
 In the call-center-texml directory, run the following command: 
 
@@ -108,18 +136,19 @@ Open this .env file and fill in the required variables.
 
 *SLACK_URL:* The slack url will be found on the slack app for incoming webhooks. More on this can be found [here](https://api.slack.com/messaging/webhooks). 
 
-*NGROK_URL:* For the project you will ned ngrok installed and running. Grad the url you got from step 2 and place here.
+*NGROK_URL:* For the project you will need ngrok installed and running. Grab the forwarding url you got from Step 3 and place here.
 
-*OUTBOUND_PROFILE_ID:* This is the ID of the outbound profile assigned to your connections. Used to know what connections to grab from your account.
+*OUTBOUND_PROFILE_ID:* This is the ID of the outbound profile, from Step 7, assigned to your SIP connections. It's used to know what SIP connections to utilize for connecting the callers calls to your agents.
 
-Save this file. If these are correct, you should now have everthing you need to run the app.
+Save this file. If these are correct, you should now have everthing you need to run the application.
 
-#### 10. Configure your Answer XML file.
+#### Step 10. Configure your Answer XML file
 
-On the condition that the agent hangs up, how do you want this to be handled?
+On the condition that the agent hangs up first, when they have finished a call with the caller, you are welcome to handle this in any way you chose.
 
-You can specify this in your answer.xml file. A dial is there as a placeholder. If you want nothing to be done. Send an empty XML file.
+You can specify this in your answer.xml file. A `say` is specified for now, where the caller will hear Alice thanking the caller for dialing in before ending the call. If you have an IVR, you may want instead use `dial` which could send the caller back to the IVR, should they wish to have a conversation with another department.
 
+---
 
 ## Running The Application
 
@@ -127,7 +156,9 @@ Use the following command to execute the application:
 
 ``PYTHONPATH=`pwd`/ python call_center/main.py``
 
-You will now see it running on localhost port 8080.
+You will now see the application running on localhost port 8080 and can test your call center application by dialing the number you purchased from Step 4.
+
+The TeXML application will answer the call and inform the caller that they are now attempting to connect them to an available agent. At this point, the clients the agents used to register their SIP Connections credentials will start to ring if they are available.
 
 
 ## Optional: Setting up Audio files
@@ -148,10 +179,12 @@ Then un-comment the <play> verbs that are in the busy_template, inbound_template
 
 E.g <Play>{ngrok_url}/TeXML/support_busy</Play>
 
-Then get rid of the says and the TeXML will look for the audio files instead of the say.
+Then remove the `say`'s and the TeXML will look for the audio files instead of the say.
 
-## Conclusion
+You can also specify a recording status call back url in the voicemail.xml file. Once a call had ended, Telnyx's TeXML server will send a POST request with the url of the recorded file to the url you specified. 
 
-That's it! Now all calls made to your Telnyx number will go to your SIP connections.
+## Follow-ups & Next Steps
 
-
+[TeXML Docs](https://developers.telnyx.com/docs/api/v2/call-control/TeXML-Translator)\
+[Ngrok Tutorial](https://developers.telnyx.com/docs/v2/development/ngrok)\
+[Python Aiohttp](https://docs.aiohttp.org/en/stable/)
