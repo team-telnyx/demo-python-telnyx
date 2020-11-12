@@ -130,15 +130,15 @@ In the call-center-texml directory, run the following command:
 This will create the .env file within the call-center directory.
 Open this .env file and fill in the required variables.
 
-*API_KEY:* This is your Telnyx API Key available [here](https://portal.telnyx.com/#/app/api-keys). 
+**API_KEY:** This is your Telnyx API Key available [here](https://portal.telnyx.com/#/app/api-keys). 
 
-*PROD:* Defaults to True. You can set this to either True or False. If set to True, the scheduled jobs for updating connections and sending balance notifications will run in intervals.  
+**PROD:** Defaults to True. You can set this to either True or False. If set to True, the scheduled jobs for updating connections and sending balance notifications will run in intervals.  
 
-*SLACK_URL:* The slack url will be found on the slack app for incoming webhooks. More on this can be found [here](https://api.slack.com/messaging/webhooks). 
+**SLACK_URL:** The slack url will be found on the slack app for incoming webhooks. More on this can be found [here](https://api.slack.com/messaging/webhooks). 
 
-*NGROK_URL:* For the project you will need ngrok installed and running. Grab the forwarding url you got from Step 3 and place here.
+**NGROK_URL:** For the project you will need ngrok installed and running. Grab the forwarding url you got from Step 3 and place here.
 
-*OUTBOUND_PROFILE_ID:* This is the ID of the outbound profile, from Step 7, assigned to your SIP connections. It's used to know what SIP connections to utilize for connecting the callers calls to your agents.
+**OUTBOUND_PROFILE_ID:** This is the ID of the outbound profile, from Step 7, assigned to your SIP connections. It's used to know what SIP connections to utilize for connecting the callers calls to your agents.
 
 Save this file. If these are correct, you should now have everthing you need to run the application.
 
