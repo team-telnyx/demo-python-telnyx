@@ -53,7 +53,7 @@ Access the Telnyx Mission Control Portal and [buy a phone number](https://portal
 
 This is your TeXML Call Center phone number that end users will call to reach your application.
 
-#### ![buy a phone number](screenshots/buy_phone_number.png)
+#### ![buy a phone number](imgs/buy_phone_number.png)
 
 
 #### Step 5: Create a Telnyx TeXML Application
