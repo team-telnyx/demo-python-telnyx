@@ -139,6 +139,8 @@ Open this .env file and fill in the required variables.
 
 **SLACK_URL:** The Slack url will be found on the slack app for incoming webhooks. More on setting up Slack API integrations can be found [at Slack's documentation](https://api.slack.com/messaging/webhooks). 
 
+Note: The slack_url can be left blank if slack is not being used.
+
 **NGROK_URL:** For the project you will need ngrok installed and running. Grab the forwarding url you got from Step 3 and place here.
 
 **OUTBOUND_PROFILE_ID:** This is the ID of the outbound profile, from Step 7, assigned to your SIP connections. It's used to know what SIP connections to utilize for connecting the callers calls to your agents.
