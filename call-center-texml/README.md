@@ -19,11 +19,11 @@ In this guide, you’ll learn how to get started with the Call Center App by usi
 1. Sign Up for a Telnyx Mission Control Portal Account
 2. Create a Telnyx API Key
 3. Install Ngrok
-4. Buy a phone number
-5. Create a Telnyx TeXML Application
+4. Create a Telnyx TeXML Application
+5. Buy a phone number
 6. Create your agents credential based SIP Connections
 7. Create an outbound voice profile and associate all the SIP Connections
-8. Set up virtual your virtual environment
+8. Set up your virtual environment
 9. Run Setup and configure variables
 10. Configure your Answer XML file
 
@@ -43,30 +43,34 @@ Your Telnyx API Key can be created on the API Keys [page](https://portal.telnyx.
 
 Download and install [ngrok](https://ngrok.com/).
 
-Start up ngrok with `ngrok http 8000` and make note of the https `Forwarding` URL.
+Start up ngrok with `ngrok http 8080` and make note of the https `Forwarding` URL.
 
 You will need it to be able to receive websocket requests from the TeXML application.
 
-#### Step 4: Buy a phone number
 
-Access the Telnyx Mission Control Portal and [buy a phone number](https://portal.telnyx.com/#/app/numbers/search-numbers).
-
-This is your TeXML Call Center phone number that end users will call to reach your application.
-
-#### ![buy a phone number](imgs/buy_phone_number.png)
-
-
-#### Step 5: Create a Telnyx TeXML Application
+#### Step 4: Create a Telnyx TeXML Application
 
 Setup and configure your [TeXML application](https://portal.telnyx.com/#/app/call-control/texml) 
 
-Set the 'Voice Method' to GET and put the url: ngrok_forwarding_url + /TeXML/inbound. Eg. http://b06b087392cd.ngrok.io/TeXML/inbound
+Set the Voice Method to GET and put the url: ngrok_forwarding_url + /TeXML/inbound. E.g. https://b06b087392cd.ngrok.io/TeXML/inbound
 
-Set the Status Callback Method to 'POST'.
+Set the Status Callback Method to 'POST' amd enter the url: ngrok_forwarding_url + /TeXML/events. E.g. https://b06b087392cd.ngrok.io/TeXML/events
+
 
 **E.g**
 
 #### ![TeXML APP](imgs/texml_app.png)
+
+
+#### Step 5: Buy a phone number
+
+Access the Telnyx Mission Control Portal and [buy a phone number](https://portal.telnyx.com/#/app/numbers/search-numbers).
+
+At checkout, use the drop-down box labelled **Connection or Application** to select the application you just created. This associates your new phone number with the application.
+
+This is your TeXML Call Center phone number that end users will call to reach your application.
+
+#### ![buy a phone number](imgs/buy_phone_number.png)
 
 
 #### Step 6. Create your agents credential based SIP Connections
@@ -101,7 +105,6 @@ Guide on setting up an outbound voice profile can be found [here](https://suppor
 
 Please take note of the profile ID as you will need this for your environment file.
 
----
 
 #### Step 8. Set up virtual your virtual environment
 
@@ -134,7 +137,7 @@ Open this .env file and fill in the required variables.
 
 **PROD:** Defaults to True. You can set this to either True or False. If set to True, the scheduled jobs for updating connections and sending balance notifications will run in intervals.  
 
-**SLACK_URL:** The slack url will be found on the slack app for incoming webhooks. More on this can be found [here](https://api.slack.com/messaging/webhooks). 
+**SLACK_URL:** The Slack url will be found on the slack app for incoming webhooks. More on setting up Slack API integrations can be found [at Slack's documentation](https://api.slack.com/messaging/webhooks). 
 
 **NGROK_URL:** For the project you will need ngrok installed and running. Grab the forwarding url you got from Step 3 and place here.
 
@@ -156,7 +159,7 @@ Use the following command to execute the application:
 
 ``PYTHONPATH=`pwd`/ python call_center/main.py``
 
-You will now see the application running on localhost port 8080 and can test your call center application by dialing the number you purchased from Step 4.
+You will now see the application running on localhost port 8080 and can test your call center application by dialing the number you purchased from Step 5.
 
 The TeXML application will answer the call and inform the caller that they are now attempting to connect them to an available agent. At this point, the clients the agents used to register their SIP Connections credentials will start to ring if they are available.
 
