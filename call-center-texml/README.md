@@ -45,7 +45,7 @@ Download and install [ngrok](https://ngrok.com/).
 
 Start up ngrok with `ngrok http 8080` and make note of the https `Forwarding` URL.
 
-You will need it to be able to receive websocket requests from the TeXML application.
+You will need it to be able to receive requests from the TeXML application.
 
 
 #### Step 4: Create a Telnyx TeXML Application
