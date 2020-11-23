@@ -1,0 +1,14 @@
+aiohttp==3.7.2
+APScheduler==3.6.3
+async-timeout==3.0.1
+attrs==20.3.0
+chardet==3.0.4
+idna==2.10
+idna-ssl==1.1.0
+multidict==5.0.0
+python-dotenv==0.15.0
+pytz==2020.4
+six==1.15.0
+typing-extensions==3.7.4.3
+tzlocal==2.1
+yarl==1.6.2

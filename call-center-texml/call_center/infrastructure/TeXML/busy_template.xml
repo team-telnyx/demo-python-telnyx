@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This second script attempts to connect the call with the agents after playing a second audio -->
+<Response>
+<!-- The play verb plays a greeting from an MP3 file when the call is answered -->
+    <!-- Un-comment if audio files will be used <Play>{ngrok_url}/TeXML/support_busy</Play> -->
+    <Say voice="alice">We apologize, all of our agents are currently busy. Please hold while we try to connect you again. </Say>
+   <!-- The dial verb dials simultaneous calls to the numbers listed below and proceeds to the next script denoted in action if the call is not answered  -->
+    <Dial record="record-from-answer-dual">
+        {uris}
+    </Dial>
+    <Pause length="1"/>
+    <Redirect method="POST">{ngrok_url}/TeXML/completed</Redirect>
+</Response>
+

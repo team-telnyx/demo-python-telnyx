@@ -4,8 +4,6 @@
 
 ![Telnyx](logo-dark.png)
 
-Sample application demonstrating Node SDK Basics
-
 </div>
 
 ## Documentation & Tutorial
@@ -28,6 +26,7 @@ You will need to set up:
 | Example                            | Description                                                                                                         |
 |:-----------------------------------|:--------------------------------------------------------------------------------------------------------------------|
 | [Flask Messaging](flask-messaging) | Example working with inbound MMS & SMS messages, downloading media from inbound MMS, and uploading media to AWS S3. |
+| [TeXML Call Center](call-center-texml) | Call center solution using aiohttp and Telnyx TeXML. |
 
 ### Install
 

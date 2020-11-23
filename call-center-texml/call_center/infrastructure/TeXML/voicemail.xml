@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This third script plays voicemail instructions and records a voicemail -->
+<Response>
+    <Say voice="alice">You have reached the call center voicemail. Please leave a message after the beep. </Say>
+    <!-- Record the Voicemail and sent to this test url -->
+    <Record recordingStatusCallback="https://record_demo.requestcatcher.com/test" playBeep="true" recordingStatusCallbackMethod="POST"/>
+</Response>
