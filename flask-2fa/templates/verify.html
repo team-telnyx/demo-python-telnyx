@@ -1,0 +1,19 @@
+<html>
+  <head>
+    <title>Telnyx 2FA Demo - Verify</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">  </head>
+  <body>
+    <div class="container">
+      <h1>Hi {{user}}, please verify your phone number by entering the pin below</h1>
+      <br>
+      <form action="" method="post">
+        <input type="text" placeholder="4-digit code" name="code" value="{{request.form.code }}">
+        <input class="btn btn-default" type="submit" value="Login">
+      </form>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    </div>
+  </body>
+</html>
