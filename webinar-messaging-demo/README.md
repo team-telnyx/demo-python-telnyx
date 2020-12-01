@@ -31,11 +31,11 @@ You will need to set up:
 
 The following environmental variables need to be set
 
-| Variable               | Description                                                                                                                                              |
-|:-----------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `TELNYX_API_KEY`       | Your [Telnyx API Key](https://portal.telnyx.com/#/app/api-keys?utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link)              |
-| `TELNYX_PUBLIC_KEY`    | Your [Telnyx Public Key](https://portal.telnyx.com/#/app/account/public-key?utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link) |
-| `PORT`      | **Defaults to `8000`** The port the app will be served                                                                                                   |
+| Variable            | Description                                                                                                                                              |
+|:--------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `TELNYX_API_KEY`    | Your [Telnyx API Key](https://portal.telnyx.com/#/app/api-keys?utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link)              |
+| `TELNYX_PUBLIC_KEY` | Your [Telnyx Public Key](https://portal.telnyx.com/#/app/account/public-key?utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link) |
+| `PORT`              | **Defaults to `8000`** The port the app will be served                                                                                                   |
 
 ### .env file
 
