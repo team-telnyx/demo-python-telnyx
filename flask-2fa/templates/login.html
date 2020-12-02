@@ -1,22 +1,79 @@
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>Telnyx 2FA Demo - Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">  </head>
-  <body>
-    <div class="container">
-      <h1>Please login</h1>
-      <br>
-      <form action="" method="post">
-        <input type="text" placeholder="Username" name="username" value="{{
-          request.form.username }}">
-         <input type="password" placeholder="Password" name="password" value="{{
-          request.form.password }}">
-        <input class="btn btn-default" type="submit" value="Login">
+	<head>
+		<meta charset="utf-8">
+		<title>Telnyx Verify Demo</title>
+		<style>
+    body {
+      background-color: #1d2241;
+      font-family: Tahoma, Geneva, sans-serif;
+    }
+    a {
+      color: #00c08b;
+      text-decoration: none;
+    }
+    p {
+      color: rgba(255, 255, 255, 0.6);
+      
+    }
+    .telnyx_logo {
+      width: 15%
+    }
+    .heading {
+      text-align: center;
+			color: #00c08b;
+			font-size: 36px;
+			padding: 20px 0 20px 0;
+    }
+    .error {
+      color: red;
+    }
+		.login-form {
+			width: 300px;
+			margin: 0 auto;
+			font-family: Tahoma, Geneva, sans-serif;
+		}
+		.login-form h1 {
+			text-align: center;
+			color: #00c08b;
+			font-size: 24px;
+			padding: 20px 0 20px 0;
+		}
+		.login-form input[type="password"],
+		.login-form input[type="text"] {
+			width: 100%;
+			padding: 15px;
+			border: 1px solid #dddddd;
+			margin-bottom: 15px;
+			box-sizing:border-box;
+		}
+		.login-form input[type="submit"] {
+			width: 100%;
+			padding: 15px;
+			background-color: #00c08b;
+			border: 0;
+			box-sizing: border-box;
+			cursor: pointer;
+			font-weight: bold;
+			color: #ffffff;
+		}
+		</style>
+	</head>
+	<body>
+    <div class="heading">
+      <img src="https://developers.telnyx.com/assets/telnyx-logo.svg" class="telnyx_logo" />
+    </div>
+		<div class="login-form">
+			<h1>Returning User</h1>
+			<form action="login" method="POST">
+				<input type="text" name="username" placeholder="Username" required>
+				<input type="password" name="password" placeholder="Password" required>
+        <input type="submit">
       </form>
+      <p>Don't have an account? <a href="/signup">Sign Up</a></p>
       {% if error %}
         <p class="error"><strong>Error:</strong> {{ error }}
       {% endif %}
-    </div>
-  </body>
+		</div>
+	</body>
 </html>
