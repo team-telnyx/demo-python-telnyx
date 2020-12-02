@@ -34,23 +34,46 @@ def welcome():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
+
+    # IF a post request comes through, check if user exists with given attributes
     if request.method == 'POST':
         user = User(request.form['username'], request.form['password'])
-        if user not in users:
-            error = 'Invalid Credentials. Please try again.'
-        else:
+        user_exists = sql_utils.LoginUser(user)
+
+        # Set current user if they logged in correctly
+        if user_exists:
+            global current_user
+            current_user = user
             return redirect('/success')
+        else:
+            error = "User does not exist or incorrect password."
+
+    # Default page for GET request
     return render_template('login.html', error=error)
 
 # Signup page for users that initiates a 2FA for given phone number and redirects to verify page
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     error = None
+
+    # If a post requests comes through, initiate new user
     if request.method == 'POST':
+
+        # Set local storage user to new form attributes
         global current_user
         current_user = User(request.form['username'], request.form['password'], request.form['phone_number'])
+        
+        # Initiate the verification
         r = telnyx_wrappers.CreateVerification(current_user.phone_number)
-        user_created = sql_utils.InsertUser(current_user)
+
+        # If username available insert the user, otherwise throw an error
+        if sql_utils.CheckUsername(current_user):
+            user_created = sql_utils.InsertUser(current_user)
+        else:
+            error = f'Username {current_user.username} already in use, please try another'
+            return render_template('signup.html', error=error)
+        
+        # If the verify request and insert call went through, continue
         if r.status_code == 200:
             if user_created:
                 return redirect('/verify')
@@ -59,16 +82,23 @@ def signup():
                 return render_template('signup.html', error=error)
         else:
             error = f'Request to initiate verification failed: {r.status_code} status'
-            return render_template('signup.html', error=error)
-    return render_template('signup.html')
+    
+    # Default for GET request to show page
+    return render_template('signup.html', error=error)
 
 # Verify page attempts to verify based on input code and redirects to success
 @app.route('/verify', methods=['GET', 'POST'])
 def verify():
     error = None
+
+    # If a post request comes through, initiate verification check
     if request.method == 'POST':
+
+        # Retrieve code and submit it to Telnyx
         code_try = request.form['code']
         r = telnyx_wrappers.SubmitVerificationCode(code_try, current_user.phone_number)
+        
+        # If the code is accepted, verify the user in the database
         if r.status_code == 200 and r.json().get('data').get("response_code") == "accepted":
             user_verified = sql_utils.VerifyUser(current_user)
             if user_verified:
@@ -78,6 +108,8 @@ def verify():
                 return render_template('verify.html', user=current_user.username, error=error)
         else:
             error = 'Incorrect Code. Please try again.'
+    
+    # Default for GET request to show page
     return render_template('verify.html', user=current_user.username, error=error)
         
 
