@@ -1,9 +1,13 @@
 import telnyx
 import requests
-from flask import Flask, render_template, redirect, request
+import os
+from dotenv import load_dotenv
+from flask import Flask, render_template, redirect, request, make_response
+
+# Load environment
+load_dotenv()
 
 # External .py files for the project
-import config
 import sql_utils
 from user import User
 
@@ -12,23 +16,17 @@ import telnyx_wrappers
 
 # Run flask app and set telnyx API Key
 app = Flask(__name__)
-telnyx.api_key = config.API_KEY
-
-# Local storage variable for current user
-current_user = None
+telnyx.api_key = os.getenv("API_KEY")
 
 # Homepage redirects to user welcome if someone logged in, otherwise prompts user to login
 @app.route('/')
 def home():
-    if current_user:
-        return redirect('/success')
-    else:
-        return redirect('/signup') 
+    return redirect('/signup') 
 
 # Success page simply welcomes user
 @app.route('/success')
 def welcome():
-    return render_template('welcome.html', phone_number=current_user.phone_number, user=current_user.username)
+    return render_template('welcome.html', user=request.cookies.get('username'))
 
 # Login page for users that checks against user database
 @app.route('/login', methods=['GET', 'POST'])
@@ -42,9 +40,10 @@ def login():
 
         # Set current user if they logged in correctly
         if user_exists:
-            global current_user
-            current_user = user
-            return redirect('/success')
+            resp = make_response(redirect('/success'))
+            resp.set_cookie('username', user.username)
+
+            return resp
         else:
             error = "User does not exist or incorrect password."
 
@@ -59,8 +58,7 @@ def signup():
     # If a post requests comes through, initiate new user
     if request.method == 'POST':
 
-        # Set local storage user to new form attributes
-        global current_user
+        # Create new user object
         current_user = User(request.form['username'], request.form['password'], request.form['phone_number'])
         
         # Initiate the verification
@@ -76,7 +74,10 @@ def signup():
         # If the verify request and insert call went through, continue
         if r.status_code == 200:
             if user_created:
-                return redirect('/verify')
+                resp = make_response(redirect('/verify'))
+                resp.set_cookie('username', current_user.username)
+                resp.set_cookie('phone', current_user.phone_number)
+                return resp
             else:
                 error = 'Failed to insert new user to database!'
                 return render_template('signup.html', error=error)
@@ -96,21 +97,23 @@ def verify():
 
         # Retrieve code and submit it to Telnyx
         code_try = request.form['code']
-        r = telnyx_wrappers.SubmitVerificationCode(code_try, current_user.phone_number)
+        r = telnyx_wrappers.SubmitVerificationCode(code_try, request.cookies.get('phone'))
         
         # If the code is accepted, verify the user in the database
         if r.status_code == 200 and r.json().get('data').get("response_code") == "accepted":
-            user_verified = sql_utils.VerifyUser(current_user)
+            user_verified = sql_utils.VerifyUser(request.cookies.get('username'))
             if user_verified:
-                return redirect('/success')
+                resp = make_response(redirect('/success'))
+                resp.set_cookie('username', request.cookies.get('username'))
+                return resp
             else:
                 error = 'Failed to update database with verified user.'
-                return render_template('verify.html', user=current_user.username, error=error)
+                return render_template('verify.html', user=request.cookies.get('username'), error=error)
         else:
             error = 'Incorrect Code. Please try again.'
     
     # Default for GET request to show page
-    return render_template('verify.html', user=current_user.username, error=error)
+    return render_template('verify.html', user=request.cookies.get('username'), error=error)
         
 
 # Main program execution
