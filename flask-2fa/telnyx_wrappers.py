@@ -13,7 +13,7 @@ def CreateVerification(phone_number):
     }
     payload = {
         "phone_number": phone_number,
-        "twofa_profile_id": os.getenv("VERIFY_KEY"),
+        "verify_profile_id": os.getenv("VERIFY_KEY"),
         "type": "sms",
         "timeout": 300
     }
