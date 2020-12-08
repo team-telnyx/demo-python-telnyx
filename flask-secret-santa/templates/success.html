@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Telnyx Secret Santa</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        .heading {
+            text-align: center;
+            color: #00c08b;
+            font-size: 20px;
+            padding: 20px 0 20px 0;
+        }
+
+        .telnyx_logo {
+            width: 40%;
+            height: auto;
+        }
+
+        h1 {
+            font-family: 'Mountains of Christmas', cursive;
+        }
+
+        body {
+            color: #00c08b;
+            height: 100%;
+            background: url(https://i.pinimg.com/originals/f9/f2/19/f9f2194c96181986290543d3b1493336.jpg) no-repeat center center fixed;
+            background-position: cover;
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 25px 0;
+        }
+
+        td {
+            padding: 10px 0;
+        }
+    </style>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+</head>
+
+<body>
+    <!-- Default form register -->
+    <div class="container" style="text-align: center; margin-top: 50px;">
+        <div class="heading">
+            <img src="https://assets.telnyx.com/assets/logo-dark.adc10.svg" class="telnyx_logo" />
+        </div>
+        <h1>
+            <span style="color: #00c08b">S</span>
+            <span style="color: red">e</span>
+            <span style="color: #00c08b">c</span>
+            <span style="color: red">r</span>
+            <span style="color: #00c08b">e</span>
+            <span style="color: red">t</span>
+            <span style="color: #00c08b">&nbsp;</span>
+            <span style="color: red">S</span>
+            <span style="color: #00c08b">a</span>
+            <span style="color: red">n</span>
+            <span style="color: #00c08b">t</span>
+            <span style="color: red">a</span>
+            <span style="color: #00c08b">&nbsp;</span>
+            <span style="color: red">G</span>
+            <span style="color: #00c08b">e</span>
+            <span style="color: red">n</span>
+            <span style="color: #00c08b">e</span>
+            <span style="color: red">r</span>
+            <span style="color: #00c08b">a</span>
+            <span style="color: red">t</span>
+            <span style="color: #00c08b">o</span>
+            <span style="color: red">r</span>
+        </h1>
+        <div style="height: 50px">
+            <!-- Divider -->
+        </div>
+        <div id="participantsTable" style="display: none">
+
+        
+            <table style="margin: 0 auto;">
+                <tr>
+                    <th>
+                        Participant
+                    </th>
+                    <th>
+                        Assigned Partner
+                    </th>
+                </tr>
+
+                {% for partners in assignments %}
+                <tr>
+                    <td>{{partners[0]}}</td>
+                    <td>{{partners[1]}}</td>
+                </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+
+            <button id="participantsButton" class="btn btn-info my-4 btn-block" style="background-color:#00c08b; width: 30%; margin:0 auto; display:block" onClick="toggleParticipants()">
+                Reveal Secret Matchups!
+            </button>
+
+    </div>
+    <script>
+        function toggleParticipants() {
+			var participants = document.getElementById("participantsTable");
+            if(participants.style.display == "none") {
+                document.querySelector("#participantsButton").innerHTML = "Hide Secret Matchups!";
+                participants.style.display = "block";
+            } else {
+                document.querySelector("#participantsButton").innerHTML = "Reveal Secret Matchups!";
+                participants.style.display = "none";
+            }
+		}
+    </script>
+    <!-- Default form register -->
+</body>
+
+</html>
