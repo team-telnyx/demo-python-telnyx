@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Telnyx Secret Santa</title>
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<style>
+		.heading {
+			text-align: center;
+			color: #00c08b;
+			font-size: 20px;
+			padding: 20px 0 20px 0;
+		}
+
+		form {
+			width: 70%;
+			margin: 0 auto;
+		}
+
+		.telnyx_logo {
+			width: 40%;
+			height: auto;
+		}
+
+		h1 {
+			font-family: 'Mountains of Christmas', cursive;
+		}
+
+		body {
+			color: #00c08b;
+			height: 100%;
+			background: url(https://i.pinimg.com/originals/f9/f2/19/f9f2194c96181986290543d3b1493336.jpg) no-repeat center center fixed;
+			background-position: cover;
+		}
+
+		table {
+			border-collapse: separate;
+			border-spacing: 25px 0;
+		}
+
+		td {
+			padding: 10px 0;
+		}
+	</style>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+</head>
+
+<body>
+	<!-- Default form register -->
+	<div class="container" style="text-align: center; margin-top: 50px;">
+		<div class="heading">
+			<img src="https://assets.telnyx.com/assets/logo-dark.adc10.svg" class="telnyx_logo" />
+		</div>
+		<h1>
+			<span style="color: #00c08b">S</span>
+			<span style="color: red">e</span>
+			<span style="color: #00c08b">c</span>
+			<span style="color: red">r</span>
+			<span style="color: #00c08b">e</span>
+			<span style="color: red">t</span>
+			<span style="color: #00c08b">&nbsp;</span>
+			<span style="color: red">S</span>
+			<span style="color: #00c08b">a</span>
+			<span style="color: red">n</span>
+			<span style="color: #00c08b">t</span>
+			<span style="color: red">a</span>
+			<span style="color: #00c08b">&nbsp;</span>
+			<span style="color: red">G</span>
+			<span style="color: #00c08b">e</span>
+			<span style="color: red">n</span>
+			<span style="color: #00c08b">e</span>
+			<span style="color: red">r</span>
+			<span style="color: #00c08b">a</span>
+			<span style="color: red">t</span>
+			<span style="color: #00c08b">o</span>
+			<span style="color: red">r</span>
+		</h1>
+		<p class="h4 mb-4" style="margin-top: 25px">Participants</p>
+		<form onSubmit="validateData();" action="submit" method="POST">
+			<div id="participantsFormContainer">
+				<div class="form-row mb-4">
+					<div class="col">
+
+						<input required type="text" name="name" class="form-control" placeholder="Name">
+					</div>
+					<div class="col">
+						<input required type="text" name="number" class="form-control" placeholder="Phone number">
+					</div>
+				</div>
+				<div class="form-row mb-4">
+					<div class="col">
+
+						<input required type="text" name="name" class="form-control" placeholder="Name">
+					</div>
+					<div class="col">
+						<input required type="text" name="number" class="form-control" placeholder="Phone number">
+					</div>
+				</div>
+				<div class="form-row mb-4">
+					<div class="col">
+
+						<input required type="text" name="name" class="form-control" placeholder="Name">
+					</div>
+					<div class="col">
+						<input required type="text" name="number" class="form-control" placeholder="Phone number">
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-4">
+					<button class="btn btn-info my-4 btn-block"
+						style="background-color:#00c08b; width: 90%; margin:0 auto; display:block" onClick="addRow()"
+						type="button">Add
+						Participant</button>
+				</div>
+				<div class="col-md-4">
+					<button class="btn btn-info my-4 btn-block"
+						style="background-color:#00c08b; width: 90%; margin:0 auto; display:block" onClick="removeRow()"
+						type="button">Remove Row</button>
+				</div>
+				<div class="col-md-4">
+					<button class="btn btn-info my-4 btn-block"
+						style="background-color:#00c08b; width: 90%; margin:0 auto; display:block"
+						type="submit">Generate Pairings!</button>
+				</div>
+			</div>
+		</form>
+
+	</div>
+	<script>
+		function addRow() {
+			//var table = document.getElementById("participantsTable");
+			//var row = table.insertRow(-1).innerHTML = '<td><input type="text" class="form-control" placeholder="Name"></td> <td><input type="text" class="form-control" placeholder="Phone number"> </td>';
+			var newRow = '<div class="form-row mb-4"> <div class="col"> <input required type="text" name="name" class="form-control" placeholder="Name"> </div> <div class="col"> <input required type="text" name="number" class="form-control" placeholder="Phone number"> </div> </div>';
+			$("#participantsFormContainer").append($(newRow));
+		}
+
+		function removeRow() {
+			if ($("#participantsFormContainer").children().length <= 3) {
+				alert("Must have at least 3 participants!");
+			} else {
+				$("#participantsFormContainer").children().last().remove();
+			}
+		}
+
+		function validateData() {
+
+			// Verifying the number is valid format
+			var prevName;
+			var invalidNums = [];
+			console.log("+12412515".replace(/\D/g, ''));
+			$("input").each(function () {
+				console.log(this.name);
+				if(this.name == 'number') {
+					var stripped = this.value.replace(/\D+/g, '');
+					console.log(this.value + " stripped to " + stripped);
+					if(stripped.length != 10 && stripped.length != 11) {
+						console.log("Pushing " + stripped + " with name " + prevName);
+						invalidNums.push(prevName);
+					}
+				} else {
+					prevName = this.value;
+				}
+			});
+
+			if(invalidNums.length > 0) {
+				var printStr = "";
+				for(var i = 0; i<invalidNums.length; i++) {
+					printStr += " " + invalidNums[i];
+				}
+				alert("Invalid number formats for: " + printStr + ". Try the format XXX-XXX-XXXX");
+				return false;
+			}
+
+			return true;
+
+		}
+	</script>
+</body>
+
+</html>
