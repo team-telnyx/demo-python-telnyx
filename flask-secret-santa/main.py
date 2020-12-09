@@ -8,16 +8,12 @@ from flask import Flask, render_template, redirect, request, make_response
 # Run flask app and set telnyx API Key
 app = Flask(__name__)
 
-# Homepage redirects to user welcome if someone logged in, otherwise prompts user to login
-
-
+# Base route to show users the form
 @app.route('/')
 def home():
     return render_template("index.html")
 
 # Submit route to receive the participants list
-
-
 @app.route('/submit', methods=['POST'])
 def submit_participants():
     assignments = {}
@@ -38,24 +34,23 @@ def submit_participants():
         
         assignments = create_assignments(participants)
 
+        error = None
+
         for key, value in assignments.items():
-            send_santa(value['name'], assignments[value['target']]['name'], value['phone'])
+            status_code = send_santa(value['name'], assignments[value['target']]['name'], value['phone'])
+
+            print(status_code, flush=True)
+            if status_code != 200:
+                error = "There were one or more issues sending texts to participants"
             formatted_assignments.append([value['name'], assignments[value['target']]['name']])
 
-    return render_template("success.html", assignments=formatted_assignments)
+        return render_template("success.html", assignments=formatted_assignments, error=error)
 
-# Submit route to receive the participants list
+    return redirect('/')    
 
-
-@app.route('/test', methods=['POST'])
-def test():
-    print(request.form, flush=True)
-
-    return {}, 200
+    
 
 # Assigns each person a santa, people cannot get each other or themselves
-
-
 def create_assignments(participants):
 
     assignments = dict()
@@ -103,16 +98,19 @@ def create_assignments(participants):
     return assignments
 
 # Initiate Telnyx call to show participant sending
-
-
 def send_santa(name, target, number):
-    telnyx_response = telnyx.Message.create(
-        from_=os.getenv("TELNYX_NUMBER"),
-        to=number,
-        text=f'Hey, {name}! Your secret santa target is {target}. Have fun and happy holidays from Telnyx!'
-    )
-    return telnyx_response
-
+    try:
+        telnyx_response = telnyx.Message.create(
+            from_=os.getenv("TELNYX_NUMBER"),
+            to=number,
+            text=f'Hey, {name}! Your secret santa target is {target}. Have fun and happy holidays from Telnyx!'
+        )
+        print(f"Sent message with id: {telnyx_response.id}")
+    except Exception as e:
+        print("Error sending message")
+        print(e)
+        return 500
+    return 200
 
 # Main program execution
 if __name__ == "__main__":
