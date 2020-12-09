@@ -28,7 +28,8 @@ Generall you will need to set up:
 |:-------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------|
 | [Flask Messaging](flask-messaging)               | Example working with inbound MMS & SMS messages, downloading media from inbound MMS, and uploading media to AWS S3. |
 | [TeXML Call Center](call-center-texml)           | Call center solution using aiohttp and Telnyx TeXML.                                                                |
-| [Webinar Messaging Demo](webinar-messaging-demo) | Example auto-responder with MMS and webhook validation                                                              |
+| [Webinar Messaging Demo](webinar-messaging-demo) | Example auto-responder with MMS and webhook validation.                                                             |
+| [Secret Santa Generator](flask-secret-santa)     | Example project that generates secret santa assignments and texts all participants using Telnyx Messaging.          |
 
 ### Install
 
