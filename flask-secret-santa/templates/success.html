@@ -104,6 +104,10 @@
                 Reveal Secret Matchups!
             </button>
 
+            {% if error %}
+                <p class="error" style="color: red"><strong>Error:</strong> {{ error }}
+            {% endif %}
+
     </div>
     <script>
         function toggleParticipants() {
