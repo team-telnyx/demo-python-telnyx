@@ -13,7 +13,7 @@ Sample application that automatically texts all participants in a secret santa t
 You will need to set up:
 
 * [Telnyx Account](https://telnyx.com/sign-up?utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link)
-* [Telnyx Phone Number](https://portal.telnyx.com/#/app/numbers/my-numbers?utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link) enabled with:
+* [Telnyx Phone Number](https://portal.telnyx.com/#/app/numbers/my-numbers?utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link)
 * [Telnyx Messaging Profile](https://portal.telnyx.com/#/app/messaging?utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link)
 * [Python & PIP](/docs/v2/development/dev-env-setup?lang=python&utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link) installed
 
@@ -31,6 +31,24 @@ The following environmental variables need to be set
 | `TELNYX_API_KEY`       | Your [Telnyx API Key](https://portal.telnyx.com/#/app/api-keys?utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link)              |
 | `TELNYX_PHONE NUMBER`  | Your [Telnyx Phone Number](https://portal.telnyx.com/#/app/my-numbers?utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link)       |
 | `APP_PORT`             | **Defaults to `5000`** The port the app will be served                                                                                                   |
+
+### Requirements
+
+This app uses several pip packages to execute. To install run the following:
+
+```
+$ pip install [requirement]
+```
+
+Requirements:
+```
+telnyx
+os
+random
+phonenumbers
+dotenv
+flask
+```
 
 ### .env file
 
