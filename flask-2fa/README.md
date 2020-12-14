@@ -1,10 +1,10 @@
 <div align="center">
 
-# Telnyx-Python MMS and SMS Getting Started
+# Telnyx-Python Verify Example
 
 ![Telnyx](../logo-dark.png)
 
-Sample application demonstrating Telnyx-Python SMS and MMS attachments
+Sample application demonstrating Telnyx-Python Verify 
 
 </div>
 
@@ -17,7 +17,7 @@ The full documentation and tutorial is available on [developers.telnyx.com](http
 You will need to set up:
 
 * [Telnyx Account](https://telnyx.com/sign-up?utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link)
-* [Telnyx Verify Profile](#TODO)
+* [Telnyx Verify Profile](https://portal.telnyx.com/#/app/verify/profiles)
 * [Node & NPM](https://developers.telnyx.com/docs/v2/development/dev-env-setup?lang=node&utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link) installed
 * A MySQL Server to store user data. A simple local database can be set up using [XAMPP](https://www.apachefriends.org/index.html).
 
@@ -63,7 +63,7 @@ DB_NAME="users"
 Run the following commands to get started
 
 ```
-$ git clone https://github.com/d-telnyx/demo-python-telnyx.git
+$ git clone https://github.com/team-telnyx/demo-python-telnyx.git
 ```
 
 ### Run
