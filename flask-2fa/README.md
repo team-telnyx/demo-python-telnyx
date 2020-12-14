@@ -18,7 +18,7 @@ You will need to set up:
 
 * [Telnyx Account](https://telnyx.com/sign-up?utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link)
 * [Telnyx Verify Profile](https://portal.telnyx.com/#/app/verify/profiles)
-* [Node & NPM](https://developers.telnyx.com/docs/v2/development/dev-env-setup?lang=node&utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link) installed
+* [Python and PIP](https://developers.telnyx.com/docs/v2/development/dev-env-setup?lang=python) installed
 * A MySQL Server to store user data. A simple local database can be set up using [XAMPP](https://www.apachefriends.org/index.html).
 
 ## What you can do
