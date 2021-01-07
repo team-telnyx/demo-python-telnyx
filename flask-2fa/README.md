@@ -4,7 +4,7 @@
 
 ![Telnyx](../logo-dark.png)
 
-Sample application demonstrating Telnyx-Python Verify 
+Sample application demonstrating Telnyx-Python Verify
 
 </div>
 
@@ -70,7 +70,7 @@ $ git clone https://github.com/team-telnyx/demo-python-telnyx.git
 
 Start the server `python main.py`
 
-When the application is started, express serves it to the port specified in the .env file (Default 8000), so you can sipmly take a look at the application at localhost:8000.
+When the application is started, flask serves it to the port specified in the .env file (Default 8000), so you can sipmly take a look at the application at localhost:8000.
 
 **Note: You must enter phone number in E.164 format (i.e. +12345678910) for the code to be sent correctly.**
 
