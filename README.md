@@ -30,6 +30,7 @@ Generall you will need to set up:
 | [TeXML Call Center](call-center-texml)           | Call center solution using aiohttp and Telnyx TeXML.                                                                |
 | [Webinar Messaging Demo](webinar-messaging-demo) | Example auto-responder with MMS and webhook validation.                                                             |
 | [Secret Santa Generator](flask-secret-santa)     | Example project that generates secret santa assignments and texts all participants using Telnyx Messaging.          |
+| [Flask Call Control](flask-call-control)         | Simple call control project that handles inbound calls by speaking text and can create an outbound call to a number specified by the user. |
 
 ### Install
 
