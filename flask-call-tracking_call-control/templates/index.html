@@ -45,47 +45,35 @@
                 {% endif %}
                 {% endwith %}
 
-
+                <!-- Table Forwarded Phone Numbers -->
                 <table class="table table-hover table-dark">
 
                     <tr>
 
-                        <th>ID</th>
                         <th>Number</th>
+                        <th>City, State</th>
                         <th>Forward Number</th>
                         <th>Tag</th>
 
-                    </tr>
 
+                    {% for row in all_phone_numbers %}
                     <tr>
-                        <td>1</td>
-                        <td>+198351421432</td>
-                        <td>+123812391784</td>
-                        <td>Craigslsit</td>
-                        <td>
-                            <a href="update" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit">Edit</a>
-                            <a href="delete" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure You Want To Delete ?')">Delete</a>
-                        </td>
-                    </tr>
-
-                    {% for row in phone_numbers %}
-                    <tr>
-                        <td>{{row.id}}</td>
-                        <td>{{row.purchasedNumber}}</td>
-                        <td>{{row.forwardNumber}}</td>
-                        <td>{{row.tag}}</td>
+                        <td>{{row[1]}}</td>
+                        <td>{{row[2]}}</td>
+                        <td>{{row[3]}}</td>
+                        <td>{{row[4]}}</td>
 
 
                         <td>
-                            <a href="update/{{row.id}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.id}}">Edit</a>
-                            <a href="delete/{{row.id}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure You Want To Delete ?')">Delete</a>
+                            <a href="/number/update/{{row[0]}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row[0]}}">Edit</a>
+                            <a href="/number/delete/{{row[0]}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure You Want To Delete ?')">Delete</a>
                         </td>
 
                     </tr>
 
 
                     <!-- Modal Edit Phone Numbers-->
-                    <div id="modaledit{{row.id}}" class="modal fade" role="dialog">
+                    <div id="modaledit{{row[0]}}" class="modal fade" role="dialog">
                         <div class="modal-dialog">
 
 
@@ -95,7 +83,7 @@
                                 <div class="modal-header">
 
 
-                                    <h4 class="modal-title">Update Information</h4>
+                                    <h4 class="modal-title">Up date Information</h4>
 
 
                                 </div>
@@ -110,10 +98,10 @@
                                         <div class="form-group">
 
 
-                                            <label>purchasedNumber:</label>
-                                            <input type="hidden"  name="id" value="{{row.id}}">
+                                            <label>Purchased Number: <b>{{row[1]}}</b></label>
+                                            <input type="hidden"  name="id" value="{{row[0]}}">
 
-                                            <input type="hidden" class="form-control" name="purchasedNumber" value="{{row.name}}">
+                                            <input type="hidden" class="form-control" name="purchasedNumber" value="{{row[1]}}">
 
 
                                         </div>
@@ -123,9 +111,9 @@
                                         <div class="form-group">
 
 
-                                            <label>forwardNumber:</label>
+                                            <label>Forward Number:</label>
 
-                                            <input type="text" class="form-control" name="forwardNumber" value="{{row.email}}">
+                                            <input type="text" class="form-control" name="forward_number" value="{{row[3]}}">
 
 
                                         </div>
@@ -136,7 +124,7 @@
 
                                             <label>Tag:</label>
 
-                                            <input type="text" class="form-control" name="tag" value="{{row.phone}}">
+                                            <input type="text" class="form-control" name="tag" value="{{row[4]}}">
 
 
                                         </div>
@@ -180,6 +168,42 @@
                 </table>
 
 
+                <h2><b>Call</b> History </h2>
+                <!-- Table Call Data -->
+                <table class="table table-hover table-dark">
+
+                    <tr>
+                        <th>Caller Name</th>
+                        <th>From Number (Caller)</th>
+                        <th>To Number (Callee)</th>
+                        <th>Forwarded to Number (Forward Number)</th>
+                        <th>Date (Year/Month/Day)</th>
+                        <th>Duration (Seconds)</th>
+
+
+                        {% for row in all_call_data %}
+                    <tr>
+                        <td>{{row[1]}}</td>
+                        <td>{{row[2]}}</td>
+                        <td>{{row[3]}}</td>
+                        <td>{{row[4]}}</td>
+                        <td>{{row[5]}}</td>
+                        <td>{{row[6]}}</td>
+
+
+                        <td>
+                            <a href="/call/delete/{{row[0]}}" class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure You Want To Delete ?')">Delete</a>
+                        </td>
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                </table>
+
+
             </div>
 
 
@@ -201,18 +225,22 @@
 
                                 <div class="form-group">
 
-                                    <label>What City?</label>
+                                    <label>From What City?</label>
                                     <input type="text" class="form-control" name="city" required="1">
 
 
                                 </div>
 
 
-                                <div class="form-group">
+                                <div class="form-group has-validation">
 
 
-                                    <label>What State?</label>
-                                    <input type="text" class="form-control" name="state" required="1">
+                                    <label>From What State?</label>
+                                    <input type="text" class="form-control" name="state" required="1"
+                                           pattern="[A-Za-z]{2}" title="Must be 2 digit state abbreviation! ie. IL">
+                                    <div class="invalid-feedback">
+                                        Please make sure you've abbreviated the state!
+                                    </div>
 
 
                                 </div>
@@ -222,7 +250,10 @@
 
 
                                     <label>Number to Forward to?</label>
-                                    <input type="number" class="form-control" name="forward_number" required="1">
+                                    <input type="text" class="form-control" name="forward_number" required="1"
+                                           pattern="[+]{1}[1]{1}[0-9]{10}"
+                                           title = "Make sure its a US number in +E164 format! ie. +1234567890">
+
 
 
                                 </div>

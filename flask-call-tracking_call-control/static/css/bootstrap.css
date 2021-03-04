@@ -27,6 +27,8 @@
   --bs-danger: #dc3545;
   --bs-light: #f8f9fa;
   --bs-dark: #212529;
+  --bs-telnyx: #00C08B;
+  --bs-dark-matter: #1D2241;
   --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
@@ -2081,6 +2083,19 @@ progress {
   border-color: #373b3e;
 }
 
+.table-dark-matter {
+  --bs-table-bg: #212529;
+  --bs-table-striped-bg: #2c3034;
+  --bs-table-striped-color: #fff;
+  --bs-table-active-bg: #1D2241;
+  --bs-table-active-color: #fff;
+  --bs-table-hover-bg: #0f1226;
+  --bs-table-hover-color: #fff;
+  color: #fff;
+  border-color: #373b3e;
+}
+
+
 .table-responsive {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -2967,11 +2982,15 @@ textarea.form-control-lg {
   background-color: #6c757d;
   border-color: #6c757d;
 }
-
+.btn-telnyx {
+  color: #fff;
+  background-color: #00C08B;
+  border-color: #00C08B;
+}
 .btn-success {
   color: #fff;
-  background-color: #198754;
-  border-color: #198754;
+  background-color: #00C08B;
+  border-color: #00C08B;
 }
 .btn-success:hover {
   color: #fff;
