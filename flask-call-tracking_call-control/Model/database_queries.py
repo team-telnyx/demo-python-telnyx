@@ -52,10 +52,9 @@ def db_call_delete(id):
 
 
 def db_number_forward_fetch(purchased_number):
-    number_to_forward_to = (ForwardedPhoneNumbers
-                            .get(ForwardedPhoneNumbers.
-                                 purchased_number == purchased_number)
-                            .forward_number)
+    number_to_forward_to = ForwardedPhoneNumbers.get(
+        ForwardedPhoneNumbers.purchased_number == purchased_number
+    ).forward_number
     return number_to_forward_to
 
 

@@ -3,15 +3,14 @@ from dotenv import load_dotenv
 from peewee import *
 from peewee import CharField
 
-
 load_dotenv()
 
 mysql_db = MySQLDatabase(os.getenv('DATABASE_NAME'),
                          user=os.getenv('DATABASE_USER'),
                          password=os.getenv('DATABASE_PASSWORD'),
                          host=os.getenv('DATABASE_HOST'),
-                         port=3306,
-                         )
+                         port=3306)
+
 
 # Database setup
 
@@ -19,6 +18,7 @@ mysql_db = MySQLDatabase(os.getenv('DATABASE_NAME'),
 class BaseModel(Model):
     class Meta:
         database = mysql_db
+
 
 # peewee constructs id primary keys automatically (they are required to make queries)
 class CallTracker(BaseModel):
