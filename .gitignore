@@ -132,3 +132,4 @@ dmypy.json
 .idea
 */**.jpeg
 .DS_Store
+*.iml
