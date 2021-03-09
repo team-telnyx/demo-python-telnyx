@@ -76,7 +76,7 @@ PORT=8000
 Run the following commands to get started
 
 ```
-$ git clone https://github.com/d-telnyx/demo-python-telnyx.git
+$ git clone https://github.com/team-telnyx/demo-python-telnyx.git
 ```
 
 ### Ngrok
@@ -106,11 +106,61 @@ Connections                   ttl     opn     rt1     rt5     p50     p90
 
 At this point you can point your application to generated ngrok URL + path  (Example: `http://{your-url}.ngrok.io/faxes`).
 
-### Run
+## Run
+
+### Highlevel Code Overview
+
+#### Receiving Fax, Sending Email
+
+1. Receive the webhook from Telnyx indicating fax is incoming
+2. We only only care about the `fax.received` webhook for `inbound` faxes
+3. Extract the `to`/`from` and other information about the fax
+4. Download the attachment and save locally
+5. Lookup the association between phone_number and email
+6. Create and send an email via Mailgun with downloaded media as an attachment
+
+#### Sending Fax
+
+1. Receive webhook from mailgun for incoming email
+2. Extract the prefix of the email (`19198675309@MAILGUN_DOMAIN.com`, we want `19198675309`) and prepend the `+`
+3. Lookup the association between email and phone_number to determine the `from` phone number
+4. Save the first attachment locally
+5. Upload the attachment to S3
+6. Create and send a fax to the phone number extracted above
+
+### Update "DB"
+
+The app as provided uses a dumb-hard-coded database to minimize dependencies for the sake of examples. There is an in memory database defined at the top that associates an email to a Telnyx number.
+
+```python
+DB = [
+    {
+        "email": "@telnyx.com",
+        "phone_number": "+"
+    }
+]
+```
+
+* `phone_number` is a **Telnyx** phone number
+* `email` is the email to associate with that phone number
+
+#### Receiving faxes
+
+```
+{+19198675309} ==(faxes)==> {telnyx_phone_number} ==(emails)==> {email_as_defined}
+```
+
+#### Sending Faxes
+
+```
+{email_as_defined} ==(emails)==> {destination_phone_number@MAILGUN_DOMAIN} ==(faxes)==> {destination_phone_number}
+```
+
+### Launch the app and update callbacks
 
 Start the server `python app.py`
 
-When you are able to run the server locally, the final step involves making your application accessible from the internet. So far, we've set up a local web server. This is typically not accessible from the public internet, making testing inbound requests to web applications difficult.
+When you are able to run the server locally, the final step involves making your application accessible from the Internet. So far, we've set up a local web server. This is typically not accessible from the public internet, making testing inbound requests to web applications difficult.
 
 The best workaround is a tunneling service. They come with client software that runs on your computer and opens an outgoing permanent connection to a publicly available server in a data center. Then, they assign a public URL (typically on a random or custom subdomain) on that server to your account. The public server acts as a proxy that accepts incoming connections to your URL, forwards (tunnels) them through the already established connection and sends them to the local web server as if they originated from the same machine. The most popular tunneling tool is `ngrok`. Check out the [ngrok setup](/docs/v2/development/ngrok) walkthrough to set it up on your computer and start receiving webhooks from inbound faxes to your newly created application.
 
