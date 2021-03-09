@@ -69,7 +69,7 @@ PORT=8000
 | Callback Type   | URL                         |
 |:----------------|:----------------------------|
 | Fax Callbacks   | `{ngrok-url}/faxes`         |
-| Email Cakkvacjs | `{ngrok-url}/email/inbound` |
+| Email Callbacks | `{ngrok-url}/email/inbound` |
 
 ### Install
 
