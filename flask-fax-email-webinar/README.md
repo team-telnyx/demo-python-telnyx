@@ -42,11 +42,11 @@ The following environmental variables need to be set
 |:---------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `TELNYX_API_KEY`           | Your [Telnyx API Key](https://portal.telnyx.com/#/app/api-keys?utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link)              |
 | `TELNYX_PUBLIC_KEY`        | Your [Telnyx Public Key](https://portal.telnyx.com/#/app/account/public-key?utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link) |
-| `PORT`                     | **Defaults to `8000`** The port the app will be served                                                                                                   |
 | `TELNYX_S3_BUCKET`         | The name of the bucket to upload the media attachments                                                                                                   |
 | `TELNYX_FAX_CONNECTION_ID` | The [connection id](https://portal.telnyx.com/#/app/fax/applications) for your fax application                                                           |
 | `MAILGUN_API_KEY`          | Your [Mailgun](https://www.mailgun.com/) API key                                                                                                         |
 | `MAILGUN_DOMAIN`           | Your [Mailgun Domain](https://app.mailgun.com/app/sending/domains). Like `sandbox367c5ec1512d458e95f5e5c60f5fe97a.mailgun.org`                           |
+| `PORT`                     | **Defaults to `8000`** The port the app will be served                                                                                                   |
 
 ### .env file
 
