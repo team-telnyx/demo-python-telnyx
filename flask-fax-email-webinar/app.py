@@ -165,6 +165,6 @@ if __name__ == "__main__":
     TELNYX_S3_BUCKET = os.getenv("TELNYX_S3_BUCKET")
     telnyx.api_key = os.getenv("TELNYX_API_KEY")
     telnyx.public_key = os.getenv("TELNYX_PUBLIC_KEY")
-    TELNYX_APP_PORT = os.getenv("TELNYX_APP_PORT")
+    PORT = os.getenv("PORT")
     TELNYX_FAX_CONNECTION_ID = os.getenv("TELNYX_FAX_CONNECTION_ID")
-    app.run(port=TELNYX_APP_PORT)
+    app.run(port=PORT)
