@@ -46,6 +46,7 @@ The following environmental variables need to be set
 | `TELNYX_S3_BUCKET`         | The name of the bucket to upload the media attachments                                                                                                   |
 | `TELNYX_FAX_CONNECTION_ID` | The [connection id](https://portal.telnyx.com/#/app/fax/applications) for your fax application                                                           |
 | `MAILGUN_API_KEY`          | Your [Mailgun](https://www.mailgun.com/) API key                                                                                                         |
+| `MAILGUN_DOMAIN`           | Your [Mailgun Domain](https://app.mailgun.com/app/sending/domains). Like `sandbox367c5ec1512d458e95f5e5c60f5fe97a.mailgun.org`                           |
 
 ### .env file
 
@@ -58,6 +59,7 @@ TELNYX_PUBLIC_KEY="+kWXUag92mcUMFQopVlff7ctD/m2S/IoXv+AlI1/5a0="
 TELNYX_API_KEY="KEYI"
 TELNYX_APP_PORT=8000
 MAILGUN_API_KEY="123-432-123"
+MAILGUN_DOMAIN="sandbox367c5ec1512d458e95f5e5c60f5fe97a.mailgun.org"
 PORT=8000
 TELNYX_S3_BUCKET=telnyx-mms-demo
 TELNYX_FAX_CONNECTION_ID=36092346987
@@ -65,9 +67,9 @@ TELNYX_FAX_CONNECTION_ID=36092346987
 
 ### Callback URLs For Telnyx Applications
 
-| Callback Type                    | URL                              |
-|:---------------------------------|:---------------------------------|
-| Fax Callbacks        | `{ngrok-url}/faxes`  |
+| Callback Type   | URL                         |
+|:----------------|:----------------------------|
+| Fax Callbacks   | `{ngrok-url}/faxes`         |
 | Email Cakkvacjs | `{ngrok-url}/email/inbound` |
 
 ### Install
