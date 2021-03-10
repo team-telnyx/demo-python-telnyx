@@ -37,11 +37,6 @@ class ForwardedPhoneNumbers(BaseModel):
     tag = TextField()
 
 
-class MessageStorage(BaseModel):
-    message_body = CharField()
-    from_number = CharField()
-
-
 # Create tables function
 mysql_db.connect()
 mysql_db.create_tables([CallTracker, ForwardedPhoneNumbers])

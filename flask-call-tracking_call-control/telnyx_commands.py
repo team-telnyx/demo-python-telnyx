@@ -57,4 +57,3 @@ def difference(start_time, end_time):
     duration = math.ceil(d4)
     date = d2.date()
     return duration, date
-
