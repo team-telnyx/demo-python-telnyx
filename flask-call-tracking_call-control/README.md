@@ -11,7 +11,7 @@ Sample application demonstrating Telnyx-Python Call Control and API
 
 ## Documentation
 
-The full documentation is available on [developers.telnyx.com]https://developers.telnyx.com/docs/v2/development/dev-env-setup?lang=python)
+The full documentation is available on [developers.telnyx.com](https://developers.telnyx.com/docs/v2/development/dev-env-setup?lang=python)
 
 
 ## Pre-Reqs
