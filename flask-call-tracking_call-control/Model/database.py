@@ -39,5 +39,5 @@ class ForwardedPhoneNumbers(BaseModel):
 
 # Create tables function
 if __name__ == "__main__":
-mysql_db.connect()
-mysql_db.create_tables([CallTracker, ForwardedPhoneNumbers])
+    mysql_db.connect()
+    mysql_db.create_tables([CallTracker, ForwardedPhoneNumbers])

@@ -1,15 +1,13 @@
-<!-- PROJECT LOGO -->
-<br />
-<p align="center">
-  <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
+<div align="center">
 
-<h3 align="center">Telnyx Flask Call Control Tracker</h3>
+# Telnyx Flask Call Control Tracker
 
-  <p align="center">
-    Sample application demonstrating Telnyx-Python Call Control and API
-  </p>
+![Telnyx](../logo-dark.png)
+
+Sample application demonstrating Telnyx-Python Call Control and API
+
+
+</div>
 
 ## Documentation
 
@@ -36,7 +34,7 @@ You will need to set up:
 * Tracks the inbound calls that were made and gives duration
 * Supports multiple numbers
 
-##Usage
+## Usage
 
 ### .env file
 
@@ -49,11 +47,12 @@ TELNYX_API_KEY="YOUR_API_KEY"
 TELNYX_CONNECTION_ID="YOUR_CONNECTION_ID"
 MESSAGING_PROFILE_ID="YOUR_MESSAGING_PROFILE_ID"
 
-DB_SERVER_NAME="localhost"
-DB_USERNAME="root"
-DB_PASSWORD=""
-DB_NAME="cctracker"
+DATABASE_HOST="localhost"
+DATABASE_USER="root"
+DATABASE_PASSWORD=""
+DATABASE_NAME="cctracker"
 ```
+
 ### Callback URLs For Telnyx Applications
 
 | Callback Type                    | URL                              |
@@ -64,9 +63,9 @@ DB_NAME="cctracker"
 
 ## Installation
 
-###Environment Setup
+### Environment Setup
 
-####Ngrok
+#### Ngrok
 
 This application is served on the port defined in the runtime environment (or in the `.env` file). Be sure to launch [ngrok](https://developers.telnyx.com/docs/v2/development/ngrok?utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link) for that port
 ```
@@ -100,7 +99,17 @@ In the [Portal](https://portal.telnyx.com/)
 
 ### Run
 
-Run `database.py` to create our tables in the database we specified in `database.py` (in this case being `calltracker` and `forwardedphonenumbers`)
+#### Create Database and Tables
+
+First, make sure you have created your database in MySQL
+
+```sql
+CREATE DATABASE cctracker
+```
+
+Then, run `database.py` to create our tables in the database we specified in `database.py` (in this case being `calltracker` and `forwardedphonenumbers`)
+
+#### Start the server
 
 Start the server `python app.py`
 
@@ -108,4 +117,4 @@ When the application is started, flask serves it to the port specified in the .e
 
 Once everything is set up, you should now be able to:
 * Search and purchase specified phone numbers
-* Have those numbers be setup for forwarding towards your designated number 
+* Have those numbers be setup for forwarding towards your designated number

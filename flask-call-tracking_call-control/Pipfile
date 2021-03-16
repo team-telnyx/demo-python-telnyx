@@ -6,6 +6,11 @@ name = "pypi"
 [packages]
 telnyx = "*"
 flask = "*"
+python-dotenv = "*"
+flask-modus = "*"
+peewee = "*"
+pymysql = "*"
+werkzeug = "==0.16.1"
 
 [dev-packages]
 
