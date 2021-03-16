@@ -1,0 +1,476 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+
+
+
+{% block title %} Home {% endblock %}
+
+
+
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col md-12">
+
+            <div class="jumbotron p-3">
+
+                <h2>Forwarded <b>Phone Numbers </b>  <button type="button"  class="btn btn-success float-right"
+                                                      data-toggle="modal" data-target="#mymodal">Add New PhoneNumber</button> </h2>
+
+
+                {% with messages = get_flashed_messages() %}
+
+                {% if messages %}
+
+                {% for message in messages %}
+
+                <div class="alert alert-success alert-dismissable" role="alert">
+
+                    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+
+                        <span aria-hidden="true">x</span>
+
+                    </button>
+
+
+                    {{message}}
+
+
+                </div>
+
+
+                {% endfor %}
+
+                {% endif %}
+                {% endwith %}
+
+                <!-- Table Forwarded Phone Numbers -->
+                <table class="table table-hover table-dark">
+
+                    <tr>
+
+                        <th>Number</th>
+                        <th>City, State</th>
+                        <th>Forward Number</th>
+                        <th>Tag</th>
+
+
+                    {% for row in all_phone_numbers %}
+                    <tr>
+                        <td>{{row[1]}}</td>
+                        <td>{{row[2]}}</td>
+                        <td>{{row[3]}}</td>
+                        <td>{{row[4]}}</td>
+
+
+                        <td>
+                            <a href="/number/{{row[0]}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row[0]}}">Edit</a>
+                            <a href="/number/{{row[0]}}" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modaldelete{{row[0]}}">Delete</a>
+                        </td>
+
+                    </tr>
+                    <!-- Modal Delete Phone Numbers-->
+                    <div id="modaldelete{{row[0]}}" class="modal fade" role="dialog">
+                         <div class="modal-dialog">
+
+
+                                <div class="modal-content">
+
+
+                                    <div class="modal-header">
+
+
+                                        <h4 class="modal-title">Delete?</h4>
+
+
+                                    </div>
+
+
+                                    <div class="modal-body">
+
+
+                                        <form action="{{url_for('update', id=row[0])}}?_method=DELETE" method="POST">
+
+
+                                            <div class="form-group">
+
+
+                                                <label>Purchased Number: <b>{{row[1]}}</b></label>
+                                                <input type="hidden"  name="id" value="{{row[0]}}">
+
+                                                <input type="hidden" class="form-control" name="purchasedNumber" value="{{row[1]}}">
+
+
+                                            </div>
+
+
+
+                                            <div class="form-group">
+
+
+                                                <label>Delete Number?</label>
+
+                                                <input type="text" class="form-control" name="confirmation" required="1" onfocus="this.value=''" value="Type Y to delete!"
+                                                       pattern="[y]{1}" title="Check your spelling and try again!">
+                                                <div class="invalid-feedback">
+                                                    Please make sure you've abbreviated the state!
+                                                </div>
+                                                </div>
+
+                                            <div class="form-group">
+
+
+                                                <button class="btn btn-primary" id="deleteButton" type="submit">Delete</button>
+
+
+                                            </div>
+
+
+                                        </form>
+
+
+                                    </div>
+
+
+                                    <div class="modal-footer">
+
+
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+
+                                    </div>
+
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                    <!-- Modal Edit Phone Numbers-->
+                    <div id="modaledit{{row[0]}}" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+
+
+                            <div class="modal-content">
+
+
+                                <div class="modal-header">
+
+
+                                    <h4 class="modal-title">Update Information</h4>
+
+
+                                </div>
+
+
+                                <div class="modal-body">
+
+
+                                    <form action="{{url_for('update', id=row[0])}}?_method=PATCH" method="POST">
+
+
+                                        <div class="form-group">
+
+
+                                            <label>Purchased Number: <b>{{row[1]}}</b></label>
+                                            <input type="hidden"  name="id" value="{{row[0]}}">
+
+                                            <input type="hidden" class="form-control" name="purchasedNumber" value="{{row[1]}}">
+
+
+                                        </div>
+
+
+
+                                        <div class="form-group">
+
+
+                                            <label>Forward Number:</label>
+
+                                            <input type="text" class="form-control" name="forward_number" value="{{row[3]}}" required="1"
+                                            pattern="[+]{1}[1]{1}[0-9]{10}"
+                                            title = "Make sure its a US number in +E164 format! ie. +1234567890">
+
+
+
+                                        </div>
+
+
+                                        <div class="form-group">
+
+
+                                            <label>Tag:</label>
+
+                                            <input type="text" class="form-control" name="tag" value="{{row[4]}}" required="1">
+
+
+                                        </div>
+
+
+                                        <div class="form-group">
+
+
+                                            <button class="btn btn-primary" id="updateButton" type="submit">Update</button>
+
+
+                                        </div>
+
+
+                                    </form>
+
+
+                                </div>
+
+
+                                <div class="modal-footer">
+
+
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    {% endfor %}
+
+
+                </table>
+
+
+                <h2><b>Call</b> History </h2>
+                <!-- Table Call Data -->
+                <table class="table table-hover table-dark">
+
+                    <tr>
+                        <th>Caller Name</th>
+                        <th>From Number (Caller)</th>
+                        <th>To Number (Callee)</th>
+                        <th>Forwarded to Number (Forward Number)</th>
+                        <th>Date (Year/Month/Day)</th>
+                        <th>Duration (Seconds)</th>
+
+
+                        {% for row in all_call_data %}
+                    <tr>
+                        <td>{{row[1]}}</td>
+                        <td>{{row[2]}}</td>
+                        <td>{{row[3]}}</td>
+                        <td>{{row[4]}}</td>
+                        <td>{{row[5]}}</td>
+                        <td>{{row[6]}}</td>
+
+
+                        <td>
+                            <a href="/call/{{row[0]}}" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#modalcalldelete{{row[0]}}">Delete</a>
+                        </td>
+
+                    </tr>
+                            <!-- Modal Delete Call Record-->
+                            <div id="modalcalldelete{{row[0]}}" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+
+
+                                    <div class="modal-content">
+
+
+                                        <div class="modal-header">
+
+
+                                            <h4 class="modal-title">Delete?</h4>
+
+
+                                        </div>
+
+
+                                        <div class="modal-body">
+
+
+                                            <form action="{{url_for('delete_call', id=row[0])}}?_method=DELETE" method="POST">
+
+
+                                                <div class="form-group">
+
+
+                                                    <label>Deleting Call Record: <br >
+                                                        From: <b>{{row[2]}}</b> <br >
+                                                        To: <b>{{ row[3]}}</b> <br >
+                                                        On: <b>{{ row[5]}}</b> <br >
+                                                        That Lasted <b>{{ row[6]}}</b> Seconds </label>
+                                                    <input type="hidden"  name="id" value="{{row[0]}}">
+                                                    <input type="hidden" class="form-control" name="purchasedNumber" value="{{row[1]}}">
+
+
+                                                </div>
+
+
+
+                                                <div class="form-group">
+
+
+                                                    <label>Are You Sure?</label>
+
+                                                    <input type="text" class="form-control" name="confirmation" required="1" onfocus="this.value=''" value="Type Y to delete!"
+                                                           pattern="[y]{1}" title="Check your spelling and try again!">
+                                                </div>
+
+                                                <div class="form-group">
+
+
+                                                    <button class="btn btn-primary" id="deleteButton" type="submit">Delete</button>
+
+
+                                                </div>
+
+
+                                            </form>
+
+
+                                        </div>
+
+
+                                        <div class="modal-footer">
+
+
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+
+                                        </div>
+
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+
+
+                        {% endfor %}
+
+
+                </table>
+
+
+            </div>
+
+
+
+            <!-- Modal Add PhoneNumber-->
+
+
+            <div id="mymodal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+
+                            <h4 class="modal-title">Add Number</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <form action="{{url_for('acquire')}}" method="POST">
+
+
+                                <div class="form-group">
+
+                                    <label>From What City?</label>
+                                    <input type="text" class="form-control" name="city" required="1">
+
+
+                                </div>
+
+
+                                <div class="form-group has-validation">
+
+
+                                    <label>From What State?</label>
+                                    <input type="text" class="form-control" name="state" required="1"
+                                           pattern="[A-Za-z]{2}" title="Must be 2 digit state abbreviation! ie. IL">
+                                    <div class="invalid-feedback">
+                                        Please make sure you've abbreviated the state!
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="form-group">
+
+
+                                    <label>Number to Forward to?</label>
+                                    <input type="text" class="form-control" name="forward_number" required="1"
+                                           pattern="[+]{1}[1]{1}[0-9]{10}"
+                                           title = "Make sure its a US number in +E164 format! ie. +1234567890">
+
+
+
+                                </div>
+
+                                <div class="form-group">
+
+
+                                    <label>Tag:</label>
+                                    <input type="text" class="form-control" name="tag" required="1">
+
+
+                                </div>
+
+
+
+
+                                <div class="form-group">
+
+
+                                    <button class="btn btn-primary" type="submit">Add Number</button>
+
+
+                                </div>
+
+
+                            </form>
+
+
+                        </div>
+
+
+                        <div class="modal-footer">
+
+
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+{% endblock %}
