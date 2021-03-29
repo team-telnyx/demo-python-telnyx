@@ -9,7 +9,7 @@ mysql_db = MySQLDatabase(os.getenv('DATABASE_NAME'),
                          user=os.getenv('DATABASE_USER'),
                          password=os.getenv('DATABASE_PASSWORD'),
                          host=os.getenv('DATABASE_HOST'),
-                         port=3306)
+                         port=int(os.getenv('DATABASE_PORT')))
 
 
 # Database setup
@@ -41,3 +41,4 @@ class ForwardedPhoneNumbers(BaseModel):
 if __name__ == "__main__":
     mysql_db.connect()
     mysql_db.create_tables([CallTracker, ForwardedPhoneNumbers])
+    print('Created tables! (or they already exist)')

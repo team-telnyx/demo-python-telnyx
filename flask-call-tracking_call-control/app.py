@@ -6,7 +6,7 @@ from flask import Flask, \
     render_template, request, Response, redirect, url_for, flash
 from flask_modus import Modus
 from urllib.parse import urlunsplit
-from Model.database_queries import db_fetch_data, \
+from model.database_queries import db_fetch_data, \
     db_number_insert, db_number_update, db_number_row_identifier, \
     db_number_delete, db_call_delete, db_number_forward_fetch, \
     db_call_insert

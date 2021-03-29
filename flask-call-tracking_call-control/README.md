@@ -65,6 +65,14 @@ DATABASE_NAME="cctracker"
 
 ### Environment Setup
 
+
+#### Dependencies
+
+This package relies on some very nice external dependencies and modules. The specific ones can be found in the Pipfile. 
+To make this easier we are using `pipenv` to manage all of our packaging needs. To utilize this amazing tool, make sure you have `pip` installed, then run `pip install pipenv` 
+
+Afterwards, simply run `pipenv install` to automatically install all the required packages that are needed.
+
 #### Ngrok
 
 This application is served on the port defined in the runtime environment (or in the `.env` file). Be sure to launch [ngrok](https://developers.telnyx.com/docs/v2/development/ngrok?utm_source=referral&utm_medium=github_referral&utm_campaign=cross-site-link) for that port
@@ -101,13 +109,28 @@ In the [Portal](https://portal.telnyx.com/)
 
 #### Create Database and Tables
 
-First, make sure you have created your database in MySQL
+We will need store data somewhere and have it be recalled in order for this app to work, so we will be using a database. You can use whichever database that you prefer, but in this example here I'll be using MySQL. The process should be relatively the same across most relational databases. 
+
+First we connect to our database. I personally use MySQL Workbench to accomplish this. Take note of the credentials you used, and inset them into the .env sample file.
+Specifically, we will need: 
+
+```credentials
+DATABASE_HOST=""
+DATABASE_USER=""
+DATABASE_PASSWORD=""
+DATABASE_NAME=""
+DATABASE_PORT=""
+```
+
+With regard to MySQL, we will need to create a schema which will be acting in lieu of our database.
 
 ```sql
 CREATE DATABASE cctracker
 ```
 
-Then, run `database.py` to create our tables in the database we specified in `database.py` (in this case being `calltracker` and `forwardedphonenumbers`)
+The name will go into the `DATABASE_NAME` portion above, in this case being `cctracker`
+
+After successfully inserting the details, run `database.py` to create our tables in the database we specified in `database.py` (in this case being `calltracker` and `forwardedphonenumbers`)
 
 #### Start the server
 

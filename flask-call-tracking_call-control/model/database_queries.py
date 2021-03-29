@@ -1,4 +1,4 @@
-from Model.database import mysql_db, CallTracker, ForwardedPhoneNumbers
+from model.database import mysql_db, CallTracker, ForwardedPhoneNumbers
 
 def db_fetch_data():
     all_phone_numbers = mysql_db.execute_sql(
