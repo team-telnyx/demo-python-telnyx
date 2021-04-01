@@ -6,8 +6,9 @@ name = "pypi"
 [packages]
 telnyx = "*"
 flask = "*"
-python-dotenv = "*"
 flask-modus = "*"
+ngrok = "*"
+python-dotenv = "*"
 peewee = "*"
 pymysql = "*"
 werkzeug = "==0.16.1"
@@ -15,4 +16,4 @@ werkzeug = "==0.16.1"
 [dev-packages]
 
 [requires]
-python_version = "3.9"
+python_version = "3.8"
