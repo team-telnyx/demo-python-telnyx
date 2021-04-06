@@ -59,7 +59,7 @@ Install the dependencies:
 
 ```
 pip install telnyx
-pip install dotenv
+pip install python-dotenv
 ```
 
 ### Run
