@@ -1,5 +1,4 @@
 import telnyx
-import requests
 import os
 from dotenv import load_dotenv
 from flask import Flask, render_template, redirect, request, make_response
@@ -21,7 +20,7 @@ telnyx.api_key = os.getenv("API_KEY")
 # Homepage redirects to user welcome if someone logged in, otherwise prompts user to login
 @app.route('/')
 def home():
-    return redirect('/signup') 
+    return redirect('/signup')
 
 # Success page simply welcomes user
 @app.route('/success')
@@ -36,12 +35,14 @@ def login():
     # IF a post request comes through, check if user exists with given attributes
     if request.method == 'POST':
         user = User(request.form['username'], request.form['password'])
-        user_exists = sql_utils.LoginUser(user)
+        phone_number = sql_utils.LoginUser(user)
 
         # Set current user if they logged in correctly
-        if user_exists:
-            resp = make_response(redirect('/success'))
+        if phone_number:
+            r = telnyx_wrappers.CreateVerification(phone_number)
+            resp = make_response(redirect('/verify'))
             resp.set_cookie('username', user.username)
+            resp.set_cookie('phone', phone_number)
 
             return resp
         else:
@@ -60,7 +61,7 @@ def signup():
 
         # Create new user object
         current_user = User(request.form['username'], request.form['password'], request.form['phone_number'])
-        
+
         # Initiate the verification
         r = telnyx_wrappers.CreateVerification(current_user.phone_number)
 
@@ -70,20 +71,18 @@ def signup():
         else:
             error = f'Username {current_user.username} already in use, please try another'
             return render_template('signup.html', error=error)
-        
+
         # If the verify request and insert call went through, continue
-        if r.status_code == 200:
-            if user_created:
-                resp = make_response(redirect('/verify'))
-                resp.set_cookie('username', current_user.username)
-                resp.set_cookie('phone', current_user.phone_number)
-                return resp
-            else:
-                error = 'Failed to insert new user to database!'
-                return render_template('signup.html', error=error)
+
+        if user_created:
+            resp = make_response(redirect('/verify'))
+            resp.set_cookie('username', current_user.username)
+            resp.set_cookie('phone', current_user.phone_number)
+            return resp
         else:
-            error = f'Request to initiate verification failed: {r.status_code} status'
-    
+            error = 'Failed to insert new user to database!'
+            return render_template('signup.html', error=error)
+
     # Default for GET request to show page
     return render_template('signup.html', error=error)
 
@@ -98,9 +97,9 @@ def verify():
         # Retrieve code and submit it to Telnyx
         code_try = request.form['code']
         r = telnyx_wrappers.SubmitVerificationCode(code_try, request.cookies.get('phone'))
-        
+
         # If the code is accepted, verify the user in the database
-        if r.status_code == 200 and r.json().get('data').get("response_code") == "accepted":
+        if r.data.response_code == "accepted":
             user_verified = sql_utils.VerifyUser(request.cookies.get('username'))
             if user_verified:
                 resp = make_response(redirect('/success'))
@@ -111,14 +110,16 @@ def verify():
                 return render_template('verify.html', user=request.cookies.get('username'), error=error)
         else:
             error = 'Incorrect Code. Please try again.'
-    
+
     # Default for GET request to show page
     return render_template('verify.html', user=request.cookies.get('username'), error=error)
-        
+
 
 # Main program execution
 def main():
-    app.run(debug=True)
+    TELNYX_APP_PORT = os.getenv("PORT")
+    telnyx.api_key = os.getenv("TELNYX_API_KEY")
+    app.run(debug=True, port=TELNYX_APP_PORT)
 
 if __name__ == "__main__":
     main()
