@@ -1,23 +1,28 @@
 import pymysql
-import config
 import os
 
+
 def InitiateConnection():
+    host = os.getenv("DB_SERVER_NAME")
+    user = os.getenv("DB_USERNAME")
+    password = os.getenv("DB_PASSWORD")
+    database = os.getenv("DB_NAME")
     try:
         connection = pymysql.connect(
-            host=os.getenv("DB_SERVER_NAME"), user=os.getenv("DB_USERNAME"), passwd=os.getenv("DB_PASSWORD"), database=os.getenv("DB_NAME")
+            host=host, user=user, password=password, database=database
         )
-    except:
-        print("Failed to connect to", os.getenv("DB_SERVER_NAME"), "( table:", os.getenv("DB_NAME"), ")", flush=True)
+    except Exception as e:
+        print("Failed to connect to", host, "( database:", database, ")", flush=True)
         return None
 
     return connection
+
 
 # Inserts a user into the database specified in config using MySQL
 def InsertUser(new_user):
     # Connect to database
     connection = InitiateConnection()
-    
+
     try:
         # Create connection cursor to execute query
         cursor = connection.cursor()
@@ -28,28 +33,30 @@ def InsertUser(new_user):
         connection.commit()
         connection.close()
         return True
-    except:
+    except Exception as e:
         print("Failed to insert new user to database")
         return False
+
 
 # Verifies a user in the database specified in config using MySQL
 def VerifyUser(username):
     # Connect to database
     connection = InitiateConnection()
-    
+
     try:
         # Create connection cursor to execute update
         cursor = connection.cursor()
         query = f'UPDATE `users` SET `verified`=1 WHERE `username`=%s'
         cursor.execute(query, (username))
-        
+
         # Commit update and close connection
         connection.commit()
         connection.close()
         return True
-    except:
+    except Exception as e:
         print("Failed to verify user")
         return False
+
 
 # Checks that a username and password combination are correct
 def LoginUser(user):
@@ -59,7 +66,7 @@ def LoginUser(user):
     try:
         # Create connection cursor to execute search for user
         cursor = connection.cursor()
-        query = f'SELECT * FROM `users` WHERE `username`=%s'
+        query = f'SELECT `password`, `phone` FROM `users` WHERE `username`=%s'
         cursor.execute(query, (user.username))
 
         result = cursor.fetchall()
@@ -71,19 +78,20 @@ def LoginUser(user):
             return False
 
         # If the password matches the inputted password
-        if result[0][1] == user.password:
-            return True
-        
+        if result[0][0] == user.password:
+            return result[0][1]
+
         return False
-    except:
+    except Exception as e:
         print("Failed to log in user")
         return False
+
 
 # Checks if a username is already in use
 def CheckUsername(user):
     # Connect to database
     connection = InitiateConnection()
-    
+
     try:
         # Create connection cursor to execute check for user
         cursor = connection.cursor()
@@ -98,6 +106,6 @@ def CheckUsername(user):
         if result:
             return False
         return True
-    except:
+    except Exception as e:
         print("Failed to check username")
         return False
