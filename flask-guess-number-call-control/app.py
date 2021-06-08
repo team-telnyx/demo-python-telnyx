@@ -28,7 +28,7 @@ HANGING_UP = 'hanging up'
 app = Flask(__name__)
 
 @app.route('/dial', methods=['GET'])
-def dial_drew():
+def dial_player():
     client_state = {'action':INTRO,'remaining_attempts':3,'answer':'00'}
     encoded_client_state = encode_client_state(client_state)
   
