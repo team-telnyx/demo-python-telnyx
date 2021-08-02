@@ -6,6 +6,12 @@
 
 Sample application demonstrating Telnyx TeXML Conference Capabilities
 
+
+
+<a href="https://www.loom.com/share/cad42a5fe6734b58a8ab7e603fb218d0">
+    <p>Flask Conference Call Demo - Watch Video</p>
+    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/cad42a5fe6734b58a8ab7e603fb218d0-with-play.gif">
+  </a>
 </div>
 
 ## Pre-Reqs
