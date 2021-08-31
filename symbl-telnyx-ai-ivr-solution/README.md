@@ -1,6 +1,6 @@
 <div align="center">
 
-# Symbl <-> Telnyx AI IVR Solution
+# Telnyx & Symbl.ai : CI Enabled Transfers On Calls
 
 ![Telnyx](../logo-dark.png)
 
@@ -9,10 +9,15 @@ Sample application demonstrating a sample example of an IVR Solution using Telny
 
 </div>
 
+# Objective
+## Telnyx Voice API Intelligent Transfers to Live Operator with Symbl.ai in a Python Flask App with an IVR/AVR 
+
+## Schematic on the Technology Used:
+Telnyx built an application based on its Voice API technologies for configuring a Python bot to route calls. Adding Symbl.ai to the application enables developers to add conversation intelligence to conversational intelligence.  
+
 ## Documentation
 
 The full documentation will be available on [developers.telnyx.com]
-
 
 ## Pre-Reqs
 What you will need to set up on the Telnyx Side:
@@ -102,14 +107,28 @@ Connections                   ttl     opn     rt1     rt5     p50     p90
                               0       0       0.00    0.00    0.00    0.00
 ```
 
-At this point you can point your Call Control application (located [here](https://portal.telnyx.com/#/app/call-control/applications)) to the generated ngrok URL + path  (Example: `http://{your-url}.ngrok.io/call-control/inbound`).
+At this point you can point your Call Control application (located [here](https://portal.telnyx.com/#/app/call-control/applications)) to the generated ngrok URL + path  (Example: `http://{your-url}.ngrok.io/Webhook`).
 
-### Telnyx Portal Setup
+### Telnyx Setup
 
-In the [Portal](https://portal.telnyx.com/)
-* Create call control application and callback to ngrok
-* Attach call control application to phone number
+<details>
+<summary><strong>Step-by-step instructions</strong> (expand for details)</summary><p>
 
+1. Follow the instructions located here for call control setup: https://developers.telnyx.com/docs/v2/call-control/quickstart
+
+2. For the webhook URL that is referenced in the above guide, we will need to replace that with our custom ngrok url that would be generated. (ie. <https://your-url.ngrok.io> ). Since our app.route is targeting "/webhook", we will need to append that to the ngrok url, so it will look something like this https://your-url.ngrok.io/webhook
+
+    ![call control ngrok](./readme_img/step_1_call_control_ngrok.png) 
+
+
+3. Take note of the Call Control ID that is located on the same page as from above. This will serve as the "CONNECTION_ID" that is referenced in the .env file. Click on the API Keys tab on the left and jot down both "Telnyx API Key" and the "Telnyx Public Key" that are located there. To summarize, you will need:
+* CONNECTION_ID (this is your Call Control app ID)
+* TELNYX_API_KEY (this is found on the API Keys tab on the left of the portal page)
+* TELNYX_PUBLIC_KEY (this is found on the API Keys tab on the left of the portal page)
+
+4. You're good to go!
+
+</details>
 
 ### Symbl Portal Setup
 In the [Portal](https://platform.symbl.ai/)
@@ -119,8 +138,8 @@ In the [Portal](https://platform.symbl.ai/)
 Before you're able to run the application, you will need to set up some variables. Reference Installation from above.
 
 You will also need to fill out these variables in the conference.py file:
-* transfer_number = ``` This is  the number you want the initial caller ("customer") to be transfered to after his sentiment value gets too low```
-* conference_number = ```This is the number that you have assigned to your Call Control ID for the initial caller ("customer")```
+* transfer_number = ```This is  the number you want the initial caller ("customer") to be transfered to after his sentiment value gets too low```
+* conference_number = ```This is the number that you have assigned your Call Control ID (ie. The number that is being called into)```
 * conference_name = ```Any name that you wish to call your Conference to establish where everything should join towards ```
 
 #### Start the server
