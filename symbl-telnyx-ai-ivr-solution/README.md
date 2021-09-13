@@ -4,7 +4,7 @@
 
 ![Telnyx](../logo-dark.png)
 
-This sample application not only implements automation features on a telephony based call using Telnyx Call Control, but it also recognizes and acts on conversation sentiment to transfer and route calls directly to specified numbers by parsing data collected from Symbl.ai.   
+This sample application not only implements automation features on a telephony based call using Telnyx Call Control, but it also recognizes and acts on conversation sentiment to transfer and route calls directly to specific numbers by parsing data collected from Symbl.ai.   
 	
 </div>
 
