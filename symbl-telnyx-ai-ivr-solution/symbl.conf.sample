@@ -1,0 +1,4 @@
+# remove .sample from file name
+[credentials]
+app_id= #Your Symbl.ai appId 
+app_secret= #Your Symbl.ai appSecret 
