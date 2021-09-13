@@ -1,17 +1,19 @@
 import os
 import base64
 import threading
-import time
+import sys
 
 from flask import Flask, request, Response
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
+
+from colorama import Fore, Style
 
 import telnyx
 import symbl
 
-app = Flask(__name__)
+load_dotenv(find_dotenv())
 
-# Fill these in with your required params
+# Fill these in with your required params in the .env file
 transfer_number = os.getenv('TRANSFER_NUMBER')    # number of live operator to transfer to
 conference_number = os.getenv('CONFERENCE_NUMBER')   # number that's tied to your call control application
 conference_name = os.getenv('CONFERENCE_NAME')
@@ -19,48 +21,42 @@ symbl_number = os.getenv('SYMBL_NUMBER')   # should be left unchanged, constant 
 
 calls = []
 conference = None
-customer = ""
 customer_call_control_id = ""
 customer_call = telnyx.Call()
-first_call=True
 connection_object = ""
 conversation_id = ""
 
-class call_info():
+transfer_happened = False
+
+class CallInfo():
+    """Store all of our call information"""
     pass
 
-class my_IVR_info:
-    call_control_id_customer = ""
-    client_state = ""
+app = Flask(__name__)
 
-@app.route('/webhook', methods=['POST'])
-# Our code for handling the call control application goes here! 
+@app.route('/webhook', methods=['POST']) # Destination of our API calls, append this to your NGROK URL in the Telnyx Portal under Call Control!
+# Our code for handling the call control application goes here!
 def respond():
-
+    """This is our main logic board for the call control command"""
     # Activate global arrays
     global calls
     global conference
     global customer_call_control_id
-    global my_IVR_info
     global customer_call
-    global first_call
+    first_call = True # Keep track if first call or not
     # Get the data from the request
     data = request.json.get('data')
     #print(data, flush=True) #For testing purposes, you could print out the data object received
 
-    # Check record_type
-    # Find out how to return 200 after symbl() initiates call
-
     if data.get('record_type') == 'event':
         # Check event type
         event = data.get('event_type')
-        # print(event, flush=True) #For testing purposes you can print out the event if you'd like
+        # print(event, flush=True) # For testing purposes you can print out the event if you'd like
 
-        
-                # When call is initiated, create the new call object and add it to the calls array
+        # When call is initiated, create the new call object and add it to the calls array
         if event == "call.initiated":
-            # Extract call information and store it in a new call_info() object
-            new_call = call_info()
+            # Extract call information and store it in a new CallInfo() object
+            new_call = CallInfo()
             new_call.call_control_id = data.get('payload').get('call_control_id')
             new_call.call_leg_id = data.get('payload').get('call_leg_id')
             new_call.direction = data.get('payload').get('direction')
@@ -68,10 +64,10 @@ def respond():
             calls.append(new_call)
             # Seperate and keep track of symb versus other callers
             if new_call.direction == 'incoming' and new_call.phone_number != symbl_number and first_call == True:
-                # We will initiate the call from symbl.ai and have it create the conference
+                # We will initiate the call from symbl.ai and have it create the conference when a fresh caller comes in
                 symbl()
-                # Answer the call
-                
+                # We will keep track of our initial 'customer' by setting the client state for the call.
+                # Note it needs to be in base64 format, hence the conversion here
                 customer_call_control_id = data.get('payload').get('call_leg_id')
                 client_state_message = "customer"
                 encoded_client_state = base64.b64encode(client_state_message.encode('ascii'))
@@ -80,49 +76,55 @@ def respond():
                 print(telnyx.Call.answer(new_call, client_state=client_state_str), flush=True)
                 customer_call.call_control_id = customer_call_control_id
                 customer_call.client_state_message = client_state_str
-                first_call = False
+                first_call = False # Trigger 
             else:
-                print(telnyx.Call.answer(new_call), flush=True)        # When the call is answered, find the stored call and either add it 
+                print(telnyx.Call.answer(new_call), flush=True)        
+        # When the call is answered, find the stored call and either add it
         # to the conference or create a new one if one is not yet created
         # Symbl calling in first will create this conference
         elif event == "call.answered":
             call_id = data.get('payload').get('call_control_id')
-            call_created = call_info()
+            call_created = CallInfo()
             call_created.call_control_id = call_id
             for call in calls:
                 if call.call_control_id == call_id:
                     if not conference:
                         conference = telnyx.Conference.create(
-                            call_control_id=call_id, 
+                            call_control_id=call_id,
                             name=conference_name)
                     else:
                         conference.join(
-                            call_control_id=call_id, 
+                            call_control_id=call_id,
                             end_conference_on_exit=True)
 
         elif event == "conference.participant.joined":
             client_state = data.get('payload').get('client_state')
-            if(client_state == "Y3VzdG9tZXI="):
-                ivr()           
+            if client_state == "Y3VzdG9tZXI=":
+                ivr()
                 
-        elif event == 'call.gather.ended':
+        # Webhook recieved when button presses are stopped being inputted after a certain delay
+        elif event == 'call.dtmf.received':
             digits_pressed = data.get('payload').get('digits')
-            if (digits_pressed == "1"):
+            if digits_pressed == "1":
                 transfer ()
                 print ("Transfering call via button press!")
-            elif (digits_pressed == "2"):
-                print ("Converting to Spanish!")
-                
+            elif digits_pressed == "2":
+                print ("Digit 2 was pressed, you can do whatever else you want this to do inside here!")
+
         elif event == "call.hangup":
             call_id = data.get('payload').get('call_leg_id')
             for call in calls:
                 calls.remove(call)
+
+        elif event == "conference.ended":
+            shutdown_server()
 
     #print(request.json, flush=True); For testing purposes, you can print out the entire json received
     return Response(status=200)
 
 # our transfer command
 def transfer():
+    """Transfer command to transfer to our designated transfer target"""
     connection_id = os.getenv('CONNECTION_ID')
     client_state = "outbound agent transfer"
     encoded_client_state = base64.b64encode(client_state.encode('ascii'))
@@ -135,26 +137,31 @@ def transfer():
     )
 
 def ivr():
-    res = customer_call.gather_using_speak(
+    """IVR Speech/Commands + Initiate sentinment analysis!"""
+    # we initiate a thread to start the IVR along with starting the sentiment analysis by symbl.ai 
+    threading.Thread(target=customer_call.speak(
         payload='This is a very long string of nonsense. Press 1 to transfer. Press 2 to print something to console',
         language= 'en-US',
         voice = 'female',
-    )
+    ))
+    threading.Thread(target=sentiment())
 
 def symbl():
+    """Initiates Symbl PSTN call into our conference"""
+    import symbl
+
     global connection_object
     global conversation_id
-    
-    import symbl
+
     # symbl related variables, can optionally add paramaters/email transcript/etc
-    phoneNumber = conference_number 
-    meetingId = "" 
-    password = "" 
+    phoneNumber = conference_number
+    meetingId = ""
+    password = ""
     emailId = ""
 
     # call symble streaming API (telephony)
     connection_object = symbl.Telephony.start_pstn(
-              credentials={'app_id': '5754496268696d715a576f4966786b683875494c7370507276614b3863584b66', 'app_secret': '4e37616c4b55734c7830483234554455524656572d6a304a4b7a6343633459355434635f726863787178727a447438354e626f5f5531364f4d4c773545666d31'},
+              credentials={'app_id': os.getenv('APP_ID'), 'app_secret': os.getenv('APP_SECRET') },
         phone_number=phoneNumber,
         dtmf = ",,{}#,,{}#".format(meetingId, password),
         actions = [
@@ -169,40 +176,45 @@ def symbl():
             },
         ]
     )
-    def conversation_id():
-        connection_object.conversation.get_conversation_id()
-    
-    
+
     #conversation_id = connection_object.conversation.get_conversation_id()
-    print("Symbl has joined the call!")
+    print(f'{Fore.YELLOW}Symbl has initiated the call and is joining conference!{Style.RESET_ALL}')
     print(connection_object)
     print(conversation_id)
     print(connection_object.connectionId)
 
-# #def sentiments():
-#     def negativity_finder():
-#         import symbl
-
-#         sentiment = connection_object.conversation.get_messages(parameters={'sentiment': True})
-#         print(sentiment)
-#         # for message in sentiment.messages:
-#         #     if (message.sentiment.suggested == "negative"):
-#         #             trigger_phrase = message.text   # Phrase that triggered a negative response
-#         #             print("Message that triggered transfer:" + trigger_phrase)
-#         #             return ("negative")
-#         # try: 
-#         #     print(sentiment.messages.text)
-#         # except: 
-#         #     print("No text")
-#         threading.Timer(1.0, negativity_finder).start()
-#     negativity_finder()
-
 def sentiment():
-    sentiment = connection_object.conversation.get_messages(parameters={'sentiment': True})
-    print(sentiment)
-    threading.Timer(1.0, sentiment).start()
-        
+    """Grabs our realtime sentiment analysis"""
+    global transfer_happened
+    conversation = connection_object.conversation.get_messages(parameters={'sentiment': True})
+    #print(conversation)
+    for message in conversation.messages:
+        trigger_phrase = message.text
+        polarity = message.sentiment.polarity.score
+        print (message.text + " Polarity score: " + str(polarity))
+        delete_last_line()
+        if (polarity <= -0.7):
+            print (f'{Fore.RED}Message that triggered negative sentiment: {Style.RESET_ALL}' + trigger_phrase + " Polarity score: " + str(polarity))
+            transfer_happened = True
+            print (f'{Fore.BLUE}Negative sentiment reached desired value, inititating transfer!{Style.RESET_ALL}')
+            transfer()
+    if transfer_happened == False:
+        threading.Timer(2.0, sentiment).start()
+
+def delete_last_line():
+    """Use this function to delete the last line in the STDOUT"""
+    #cursor up one line
+    sys.stdout.write('\x1b[1A')
+    #delete last line
+    sys.stdout.write('\x1b[2K')
+
+def shutdown_server():
+    """Shuts down flask server after call termination/completion"""
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
+
 if __name__ == '__main__':
-    load_dotenv()
     telnyx.api_key = os.getenv('TELNYX_API_KEY')
     app.run(port = 5000)
