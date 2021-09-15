@@ -1,9 +1,7 @@
-<img src="./telnyx_symbl.png" width="890" />
+<img src="./telnyx_symbl.png" width="1080" />
 
-
-|[Overview](./VP1.md)  | [Telnyx Prerequisites](./VP2.md) | [Symbl Prerequisites](./VP3.md) | [Telnyx Call Control Conferencing Application](./VP4.md) | [Symbl <-> Telnyx Sentiment IVR](./VP5.md) | [What's Next?](./VP6.md)
+| [Overview](./README.md)  | [Telnyx Prerequisites](./VP2.md) | [Symbl Prerequisites](./VP3.md) | [Telnyx Call Control Conferencing Application](./VP4.md) | [Symbl <-> Telnyx Sentiment IVR](./VP5.md) | [What's Next?](./VP6.md)
 | :---: | :---: | :---: | :---: | :---: | :---: |
-
 
 # AI IVR Workshop
 

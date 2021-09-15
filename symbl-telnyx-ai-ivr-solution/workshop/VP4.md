@@ -1,4 +1,6 @@
-| [Overview](./VP1.md)  | [Telnyx Prerequisites](./VP2.md) | [Symbl Prerequisites](./VP3.md) | [Telnyx Call Control Conferencing Application](./VP4.md) | [Symbl <-> Telnyx Sentiment IVR](./VP5.md) | [What's Next?](./VP6.md)
+<img src="./telnyx_symbl.png" width="1080" />
+
+| [Overview](./README.md)  | [Telnyx Prerequisites](./VP2.md) | [Symbl Prerequisites](./VP3.md) | [Telnyx Call Control Conferencing Application](./VP4.md) | [Symbl <-> Telnyx Sentiment IVR](./VP5.md) | [What's Next?](./VP6.md)
 | :---: | :---: | :---: | :---: | :---: | :---: |
 
 # AI IVR Workshop
@@ -134,13 +136,13 @@ Grab this url and head on over to the Telnyx Dashboard page, navigate to your [C
 
 **Ensure that you append '/webhook' to the ngrok url as specified in our Flask Application**
 
-![URL Webhook Section](//images.ctfassets.net/4b49ta6b3nwj/5fWNOgoZnSwcSj28O1B5Ld/f951a6c0b7118f3a27d86aa5d5035d5e/call_control_url_webhook.PNG)
+![URL Webhook Section](./vp4_webhook.png)
 
 ## Receiving and Interpreting Webhooks
 
 We will be configuring our respond function to handle certain incoming webhooks and execute call control commands based on what the values are. Flask catches the incoming webhooks and calls the respond() function every time a webhook is sent to the route we specified as ‘/webhook’. We can see the json value of the hook in the request.json object. Here is what a basic Telnyx Call Object looks like
 
-```json
+```
 {
 	'data': {
 		'event_type': 'call.initiated',
