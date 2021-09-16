@@ -5,11 +5,11 @@
 
 # AI IVR Workshop
 
-## What's Next?
+## So, What's Next?
 
-**The world's your oyster!**
+**~Connectivity Made Simple~**
 
-### Telnyx Afterword
+## Telnyx Afterword
 You can use Telnyx to create multifunctional applications of all sorts of shapes and sizes. We offer API support to every feature that we own, from which you can create apps from automating Phone Number purchasing to Faxing Applications to full fledged Skype/Zoom-like WebRTC interfaces! Take a look at our recently featured [Verification Learn and Build](https://portal.telnyx.com/#/app/verify/learnAndBuild) to even build out your own 2FA system. We pride ourselves with having a robust feature set that is not only expansive but easy to use.
 
 Check out these resources for more documentation and examples of other code bases as well as fully completed demo-apps to spark your interest!
@@ -25,7 +25,7 @@ Check out these resources for more documentation and examples of other code base
 
 If you have any developer related questions, feel free to reach out to us on [Slack](https://joinslack.telnyx.com/) or straight from the portal by clicking the chat icon on the bottom right.
 
-### Symbl Afterword
+## Symbl Afterword
 
 With Symbl.ai you have the power to connect, visualize or transfer your conversation data. The next step is to extend your programmable intelligence beyond merely automatically intelligent transfers to a persistent, omnichannel, contextual, artificially intelligent calling experience or Computer Telephony System. After onboarding the agent, your Symbl.ai `conversationId` doesn’t change. In addition, Symbl.ai’s Tracker’s API is a feature extension for adding detection of words directly. 
 

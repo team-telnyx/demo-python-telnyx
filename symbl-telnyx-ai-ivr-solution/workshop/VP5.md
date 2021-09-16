@@ -6,7 +6,6 @@
 # AI IVR Workshop
 ## Symbl <-> Telnyx Sentiment IVR
 
-## Synopsis
 Your customer calls a telephony API programmed by Telnyx to route calls for an Integrated Virtual Assistant (IVR)/ Automated Virtual Assistant (AVA). After the customer’s call is received by Telnyx’s Voice API, Symbl.ai’s Conversation Intelligence API platform triggers automated speech recognition on the customer. Symbl.ai analyzes the customer’s messages to determine whether or not the customer responses display a rise or fall in disposition. If the disposition falls below a preset threshold, the logic of the application automatically transfers the customer away from a IVR/AVA to a live operator, creating a persistent, omnichannel, multi-member, artificially intelligent conversation.  
 
 In this demo application, we will add on to the conference application that we built in the previous step to extend the capabilities of a standard IVR to accomplish something beyond standard speech recognition: complete sentiment analysis on messages.
