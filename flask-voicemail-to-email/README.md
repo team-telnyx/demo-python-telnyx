@@ -1,6 +1,6 @@
 <div align="center">
 
-# Telnyx-Python Fax and Email Webinar Demo
+# Telnyx-Python Voicemail to Email
 
 ![Telnyx](../logo-dark.png)
 
@@ -91,7 +91,7 @@ Connections                   ttl     opn     rt1     rt5     p50     p90
                               0       0       0.00    0.00    0.00    0.00
 ```
 
-At this point you can point your application to generated ngrok URL + path  (Example: `http://{your-url}.ngrok.io/faxes`).
+At this point you can point your application to generated ngrok URL + path  (Example: `http://{your-url}.ngrok.io/inbound`).
 
 ## Highlevel Code Overview
 
