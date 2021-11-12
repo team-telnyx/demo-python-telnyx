@@ -91,7 +91,7 @@ $ export FLASK_APP=YOUR_FILE_NAME.py
 Now, we are ready to serve up our application to our local server. To do this, run:
 
 ```bash
-$ flash run
+$ flask run
 ```
 
 A successful output log should look something like:
