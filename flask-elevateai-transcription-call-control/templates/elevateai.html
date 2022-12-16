@@ -1,0 +1,77 @@
+<html>
+<head>
+      <style>
+            body {
+              background-color: #1d2241;
+              font-family: Tahoma, Geneva, sans-serif;
+            }
+            a {
+              color: #00c08b;
+              text-decoration: none;
+            }
+            p {
+              color: white;
+        
+            }
+            .telnyx_logo {
+              width: 15%
+            }
+            .heading {
+              text-align: center;
+                          color: #00c08b;
+                          font-size: 36px;
+                          padding: 20px 0 20px 0;
+            }
+            .error {
+              color: red;
+            }
+                    .login-form {
+                          width: 300px;
+                          margin: 0 auto;
+                          font-family: Tahoma, Geneva, sans-serif;
+                    }
+                    .login-form h1 {
+                          text-align: center;
+                          color: #00c08b;
+                          font-size: 24px;
+                          padding: 20px 0 20px 0;
+                    }
+                    .login-form input[type="password"],
+                    .login-form input[type="text"] {
+                          width: 100%;
+                          padding: 15px;
+                          border: 1px solid #dddddd;
+                          margin-bottom: 15px;
+                          box-sizing:border-box;
+                    }
+                    .login-form input[type="submit"] {
+                          width: 100%;
+                          padding: 15px;
+                          background-color: #00c08b;
+                          border: 0;
+                          box-sizing: border-box;
+                          cursor: pointer;
+                          font-weight: bold;
+                          color: #ffffff;
+                    }
+                    </style>
+</head>      
+<body>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ==" crossorigin="anonymous"></script>
+      <script type="text/javascript" charset="utf-8">
+            var socket = io.connect('http://' + document.domain + ':' + location.port);
+            socket.on("message-from-server-to-client", function(msg) {
+                document.getElementById('message').innerHTML = `${msg}`;
+      });
+            socket.on("message-from-server-to-client2", function(msg) {
+                document.getElementById('message2').innerHTML = `${msg}`;
+      });
+      </script>
+       <div class="heading"></div>
+          </div>
+      <center><h1 style="color:white;">Telnyx <> ElevateAI Demo</h1></center>
+      <h3 style="color:white;">Status:</h3><p id="message2"></p><br>
+      <h3 style="color:white;">All Phrases:</h3><p id="message"></p><br>
+</body>
+</html>
