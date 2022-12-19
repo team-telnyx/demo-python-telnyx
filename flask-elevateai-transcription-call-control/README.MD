@@ -4,7 +4,7 @@
 
 ![Telnyx](logo-dark.png)
 
-Sample application demonstrating Telnyx-Python transciption and recording fuctionality using Elevate AI 
+Sample application demonstrating Telnyx-Python transcription and recording functionality using Elevate AI 
 
 </div>
 
