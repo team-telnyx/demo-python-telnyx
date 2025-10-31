@@ -25,14 +25,12 @@ class WebSocketClient:
     if not TELNYX_TOKEN:
         raise ValueError("TELNYX_TOKEN environment variable is not set. Please create a .env file with your token.")
 
-    def __init__(self, voice_id: str, model_id: str = None, provider: str = ""):
+    def __init__(self, voice_id: str):
         """
         Initialize the WebSocket client for Telnyx TTS.
 
         Args:
             voice_id: Voice identifier for TTS
-            model_id: Optional TTS model identifier
-            provider: Provider name (default: "telnyx")
         """
         
         self.url = f"{self.TELNYX_BASE_URL}/speech?voice={voice_id}"
