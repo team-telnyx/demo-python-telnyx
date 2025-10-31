@@ -4,13 +4,13 @@ import base64
 from tts_ws_client import WebSocketClient
 
 
-def save_audio(audio_data: str, audio_file: str = "audio.wav"):
+def save_audio(audio_data: str, audio_file: str = "audio.mp3"):
     """
     Save base64 encoded audio data to file.
 
     Args:
         audio_data: Base64 encoded audio string
-        audio_file: Path to the audio file to save to (default: "audio.wav")
+        audio_file: Path to the audio file to save to (default: "audio.mp3")
     """
     try:
         # Decode base64 audio data
@@ -29,9 +29,7 @@ def save_audio(audio_data: str, audio_file: str = "audio.wav"):
 async def start_tts(
     text: str,
     voice_id: str = "Telnyx.NaturalHD.astra",
-    model_id: str = "",
-    provider: str = "telnyx",
-    audio_file: str = "audio.wav"
+    audio_file: str = "audio.mp3"
 ):
     """
     Test Telnyx TTS streaming with specified parameters.
@@ -42,9 +40,9 @@ async def start_tts(
         model_id: TTS model identifier
         text: Text to convert to speech
         provider: Provider name (default: "telnyx")
-        audio_file: Path to save audio file (default: "audio.wav")
+        audio_file: Path to save audio file (default: "audio.mp3")
     """
-    client = WebSocketClient(voice_id=voice_id, model_id=model_id, provider=provider)
+    client = WebSocketClient(voice_id=voice_id)
 
     print(f"Connecting to URL: {client.url}")
 
@@ -75,7 +73,7 @@ async def start_tts(
             # Save audio if present
             audio_data = data.get("audio")
             if audio_data:
-                chunk_file = f"audio_chunk.wav"
+                chunk_file = f"audio_chunk.mp3"
 
                 # Save the audio chunk
                 save_audio(audio_data, chunk_file)
