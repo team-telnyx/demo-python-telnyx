@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telnyx Live Speech-to-Text</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header with Telnyx Branding -->
+        <header class="header">
+            <div class="logo">
+                <svg width="120" height="30" viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <text x="0" y="22" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#00D084">Telnyx</text>
+                </svg>
+            </div>
+            <h1>Live Speech-to-Text</h1>
+        </header>
+
+        <!-- Configuration Section -->
+        <div class="config-section" id="configSection">
+            <h2>Configuration</h2>
+            <div class="form-group">
+                <label for="apiKey">API Key:</label>
+                <input type="password" id="apiKey" placeholder="Enter your Telnyx API Key" />
+                <button class="btn-secondary" id="toggleApiKey">Show</button>
+            </div>
+
+            <div class="form-group">
+                <label for="engine">STT Engine:</label>
+                <select id="engine">
+                    <option value="V2">V2 (Enhanced)</option>
+                    <option value="V1">V1 (Standard)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="language">Language:</label>
+                <select id="language">
+                    <option value="en">English (en)</option>
+                    <option value="es">Spanish (es)</option>
+                    <option value="fr">French (fr)</option>
+                    <option value="de">German (de)</option>
+                    <option value="it">Italian (it)</option>
+                    <option value="pt">Portuguese (pt)</option>
+                    <option value="nl">Dutch (nl)</option>
+                    <option value="pl">Polish (pl)</option>
+                    <option value="ru">Russian (ru)</option>
+                    <option value="ja">Japanese (ja)</option>
+                    <option value="zh">Chinese (zh)</option>
+                    <option value="ko">Korean (ko)</option>
+                    <option value="ar">Arabic (ar)</option>
+                    <option value="hi">Hindi (hi)</option>
+                </select>
+            </div>
+
+            <button class="btn-primary" id="saveConfig">Save Configuration</button>
+        </div>
+
+        <!-- Control Section -->
+        <div class="control-section">
+            <div class="status-indicator" id="statusIndicator">
+                <span class="status-dot"></span>
+                <span id="statusText">Not Connected</span>
+            </div>
+
+            <button class="btn-record" id="recordBtn" disabled>
+                <span class="record-icon">🎤</span>
+                <span id="recordText">Start Recording</span>
+            </button>
+        </div>
+
+        <!-- Transcription Display -->
+        <div class="transcription-section">
+            <div class="transcription-header">
+                <h2>Transcription</h2>
+                <div class="transcription-actions">
+                    <button class="btn-secondary btn-small" id="clearTranscript">Clear</button>
+                    <button class="btn-secondary btn-small" id="saveTranscript">Save Transcript</button>
+                </div>
+            </div>
+
+            <div class="transcription-output" id="transcriptionOutput">
+                <p class="placeholder">Your transcription will appear here...</p>
+            </div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label">Words:</span>
+                    <span class="stat-value" id="wordCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Duration:</span>
+                    <span class="stat-value" id="duration">00:00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Powered by <strong>Telnyx Speech-to-Text API</strong></p>
+            <p class="footer-links">
+                <a href="https://developers.telnyx.com/" target="_blank">Documentation</a> |
+                <a href="https://portal.telnyx.com/" target="_blank">Portal</a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
