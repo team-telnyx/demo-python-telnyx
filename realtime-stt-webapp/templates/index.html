@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Symptom Note - Telnyx STT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>Patient Symptom Note</h1>
+                <p class="subtitle">Real-time voice transcription for medical documentation</p>
+            </div>
+            <div class="powered-by">
+                <span>Powered by</span>
+                <strong>Telnyx</strong>
+            </div>
+        </header>
+
+        <!-- Main Card -->
+        <div class="main-card">
+            <!-- Configuration Section -->
+            <div class="config-section">
+                <div class="section-title">Configuration</div>
+
+                <!-- API Key -->
+                <div class="form-group full-width">
+                    <label for="api-key">Telnyx API Key</label>
+                    <input
+                        type="password"
+                        id="api-key"
+                        placeholder="Enter your Telnyx API key"
+                        class="input-field"
+                    >
+                </div>
+
+                <!-- Two Column Layout -->
+                <div class="two-column">
+                    <!-- STT Engine -->
+                    <div class="form-group">
+                        <label for="stt-engine">STT Engine</label>
+                        <select id="stt-engine" class="select-field">
+                            <option value="Telnyx STT">Telnyx STT</option>
+                            <option value="AWS">AWS</option>
+                            <option value="Azure">Azure</option>
+                            <option value="Google">Google</option>
+                        </select>
+                    </div>
+
+                    <!-- Language -->
+                    <div class="form-group">
+                        <label for="language">Language</label>
+                        <select id="language" class="select-field">
+                            <option value="en-US">English (US)</option>
+                            <option value="en-GB">English (UK)</option>
+                            <option value="es-ES">Spanish</option>
+                            <option value="fr-FR">French</option>
+                            <option value="de-DE">German</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recording Section -->
+            <div class="recording-section">
+                <div class="recording-header">
+                    <div class="section-title">Recording</div>
+                    <div class="status-pill" id="status-pill">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Ready</span>
+                    </div>
+                </div>
+
+                <!-- Control Buttons -->
+                <div class="controls">
+                    <button id="start-btn" class="btn btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <circle cx="8" cy="8" r="6" fill="currentColor"/>
+                        </svg>
+                        Start Recording
+                    </button>
+                    <button id="stop-btn" class="btn btn-secondary" disabled>
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <rect x="4" y="4" width="8" height="8" fill="currentColor"/>
+                        </svg>
+                        Stop Recording
+                    </button>
+                    <button id="save-btn" class="btn btn-outline">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M13 9v4H3V9H1v4a2 2 0 002 2h10a2 2 0 002-2V9h-2z" fill="currentColor"/>
+                            <path d="M8 11l4-4h-3V1H7v6H4l4 4z" fill="currentColor"/>
+                        </svg>
+                        Save Transcript
+                    </button>
+                </div>
+            </div>
+
+            <!-- Transcript Section -->
+            <div class="transcript-section">
+                <div class="section-title">Live Transcript</div>
+                <div class="transcript-container" id="transcript-container">
+                    <div class="transcript-empty">
+                        Start recording to see your transcript here...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Built with Telnyx Speech-to-Text API</p>
+        </footer>
+    </div>
+
+    <!-- Socket.IO -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
