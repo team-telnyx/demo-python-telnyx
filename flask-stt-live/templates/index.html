@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telnyx Live Speech-to-Text</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #38a169;
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .status-info {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+
+        .status-success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status-error {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .transcription-box {
+            background: #f7fafc;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #2d3748;
+        }
+
+        .transcription-box.empty {
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #718096;
+            margin-top: 5px;
+        }
+
+        .recording-indicator {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+            color: #f56565;
+            font-weight: 600;
+        }
+
+        .recording-indicator.active {
+            display: flex;
+        }
+
+        .pulse {
+            width: 15px;
+            height: 15px;
+            background: #f56565;
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎤 Telnyx Live STT</h1>
+            <p>Real-time Speech-to-Text Transcription</p>
+        </div>
+
+        <!-- Configuration Card -->
+        <div class="card">
+            <h2>⚙️ Configuration</h2>
+            <div id="statusMessage" class="hidden"></div>
+
+            <div class="form-group">
+                <label for="apiKey">Telnyx API Key</label>
+                <input type="password" id="apiKey" placeholder="Enter your Telnyx API key">
+            </div>
+
+            <div class="form-group">
+                <label for="engine">STT Engine</label>
+                <select id="engine">
+                    <option value="V2">V2 - Enhanced (Recommended)</option>
+                    <option value="V1">V1 - Standard</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="language">Language</label>
+                <select id="language">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                    <option value="it">Italian</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="nl">Dutch</option>
+                    <option value="pl">Polish</option>
+                    <option value="ru">Russian</option>
+                    <option value="ja">Japanese</option>
+                    <option value="zh">Chinese</option>
+                    <option value="ko">Korean</option>
+                    <option value="ar">Arabic</option>
+                    <option value="hi">Hindi</option>
+                </select>
+            </div>
+
+            <button id="saveConfig" class="btn btn-primary">💾 Save Configuration</button>
+        </div>
+
+        <!-- Recording Controls Card -->
+        <div class="card">
+            <h2>🎙️ Recording Controls</h2>
+
+            <div class="recording-indicator" id="recordingIndicator">
+                <div class="pulse"></div>
+                <span>RECORDING IN PROGRESS</span>
+            </div>
+
+            <div class="controls">
+                <button id="startBtn" class="btn btn-success" disabled>▶️ Start Recording</button>
+                <button id="stopBtn" class="btn btn-danger" disabled>⏹️ Stop Recording</button>
+                <button id="clearBtn" class="btn btn-primary">🗑️ Clear Transcript</button>
+                <button id="saveBtn" class="btn btn-primary">💾 Save Transcript</button>
+            </div>
+        </div>
+
+        <!-- Transcription Card -->
+        <div class="card">
+            <h2>📝 Transcription</h2>
+            <div id="transcription" class="transcription-box empty">
+                Your transcription will appear here in real-time...
+            </div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="wordCount">0</div>
+                    <div class="stat-label">Words</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="duration">0:00</div>
+                    <div class="stat-label">Duration</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Socket.IO
+        const socket = io();
+
+        // DOM Elements
+        const apiKeyInput = document.getElementById('apiKey');
+        const engineSelect = document.getElementById('engine');
+        const languageSelect = document.getElementById('language');
+        const saveConfigBtn = document.getElementById('saveConfig');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const transcriptionBox = document.getElementById('transcription');
+        const statusMessage = document.getElementById('statusMessage');
+        const recordingIndicator = document.getElementById('recordingIndicator');
+        const wordCount = document.getElementById('wordCount');
+        const durationDisplay = document.getElementById('duration');
+
+        // State
+        let mediaRecorder;
+        let audioContext;
+        let isRecording = false;
+        let transcriptionText = '';
+        let startTime;
+        let durationInterval;
+
+        // Load saved configuration
+        function loadConfig() {
+            const savedKey = localStorage.getItem('telnyx_api_key');
+            const savedEngine = localStorage.getItem('telnyx_engine');
+            const savedLanguage = localStorage.getItem('telnyx_language');
+
+            if (savedKey) {
+                apiKeyInput.value = savedKey;
+                startBtn.disabled = false;
+            }
+            if (savedEngine) engineSelect.value = savedEngine;
+            if (savedLanguage) languageSelect.value = savedLanguage;
+        }
+
+        // Save configuration
+        saveConfigBtn.addEventListener('click', () => {
+            const apiKey = apiKeyInput.value.trim();
+
+            if (!apiKey) {
+                showStatus('Please enter your API key', 'error');
+                return;
+            }
+
+            localStorage.setItem('telnyx_api_key', apiKey);
+            localStorage.setItem('telnyx_engine', engineSelect.value);
+            localStorage.setItem('telnyx_language', languageSelect.value);
+
+            startBtn.disabled = false;
+            showStatus('Configuration saved successfully!', 'success');
+        });
+
+        // Show status message
+        function showStatus(message, type = 'info') {
+            statusMessage.textContent = message;
+            statusMessage.className = `status status-${type}`;
+            statusMessage.classList.remove('hidden');
+
+            setTimeout(() => {
+                statusMessage.classList.add('hidden');
+            }, 5000);
+        }
+
+        // Start recording
+        startBtn.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const source = audioContext.createMediaStreamSource(stream);
+
+                // Create media recorder
+                mediaRecorder = new MediaRecorder(stream);
+
+                mediaRecorder.addEventListener('dataavailable', (event) => {
+                    if (event.data.size > 0) {
+                        // Convert audio to base64 and send to server
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                            const base64Audio = reader.result.split(',')[1];
+                            socket.emit('audio_data', { audio: base64Audio });
+                        };
+                        reader.readAsDataURL(event.data);
+                    }
+                });
+
+                // Start transcription session
+                socket.emit('start_transcription', {
+                    api_key: apiKeyInput.value,
+                    engine: engineSelect.value,
+                    language: languageSelect.value
+                });
+
+                // Start recording
+                mediaRecorder.start(100); // Send data every 100ms
+
+                isRecording = true;
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                recordingIndicator.classList.add('active');
+
+                // Start duration timer
+                startTime = Date.now();
+                durationInterval = setInterval(updateDuration, 1000);
+
+                showStatus('Recording started! Speak into your microphone...', 'success');
+
+            } catch (error) {
+                showStatus('Error accessing microphone: ' + error.message, 'error');
+                console.error('Microphone error:', error);
+            }
+        });
+
+        // Stop recording
+        stopBtn.addEventListener('click', () => {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+
+                socket.emit('stop_transcription');
+
+                isRecording = false;
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                recordingIndicator.classList.remove('active');
+
+                clearInterval(durationInterval);
+
+                showStatus('Recording stopped', 'info');
+            }
+        });
+
+        // Clear transcription
+        clearBtn.addEventListener('click', () => {
+            transcriptionText = '';
+            transcriptionBox.textContent = 'Your transcription will appear here in real-time...';
+            transcriptionBox.classList.add('empty');
+            wordCount.textContent = '0';
+            durationDisplay.textContent = '0:00';
+        });
+
+        // Save transcription
+        saveBtn.addEventListener('click', () => {
+            if (!transcriptionText) {
+                showStatus('No transcription to save', 'error');
+                return;
+            }
+
+            const blob = new Blob([transcriptionText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `transcription-${new Date().toISOString()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showStatus('Transcription saved!', 'success');
+        });
+
+        // Update duration
+        function updateDuration() {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            durationDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Socket.IO event handlers
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
+
+        socket.on('status', (data) => {
+            showStatus(data.message, 'info');
+        });
+
+        socket.on('error', (data) => {
+            showStatus(data.message, 'error');
+        });
+
+        socket.on('transcription', (data) => {
+            if (data.type === 'transcript' && data.transcript) {
+                const text = data.transcript;
+
+                if (data.is_final) {
+                    // Final transcript
+                    transcriptionText += text + ' ';
+                    transcriptionBox.textContent = transcriptionText;
+                } else {
+                    // Interim result
+                    transcriptionBox.textContent = transcriptionText + text;
+                }
+
+                transcriptionBox.classList.remove('empty');
+
+                // Update word count
+                const words = transcriptionText.trim().split(/\s+/).filter(w => w.length > 0);
+                wordCount.textContent = words.length;
+            }
+        });
+
+        // Initialize
+        loadConfig();
+    </script>
+</body>
+</html>
